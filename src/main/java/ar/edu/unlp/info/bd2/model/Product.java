@@ -71,4 +71,11 @@ public class Product {
         this.lastPriceUpdateDate = lastPriceUpdateDate;
     }
 
+    public Long getId() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
 }

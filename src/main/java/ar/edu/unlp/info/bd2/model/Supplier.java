@@ -56,4 +56,8 @@ public class Supplier {
     public void setCoordY(float coordY) {
         this.coordY = coordY;
     }
+
+    public Long getId() {
+        return null;
+    }
 }

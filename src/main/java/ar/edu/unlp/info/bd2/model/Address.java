@@ -72,4 +72,8 @@ public class Address {
     public void setCoordY(float coordY) {
         this.coordY = coordY;
     }
+
+    public Long getId() {
+        return null;
+    }
 }

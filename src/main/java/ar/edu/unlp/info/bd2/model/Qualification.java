@@ -34,4 +34,7 @@ public class Qualification {
         this.order = order;
     }
 
+    public Long getId() {
+        return null;
+    }
 }

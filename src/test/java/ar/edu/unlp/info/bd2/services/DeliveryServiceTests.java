@@ -203,7 +203,7 @@ public class DeliveryServiceTests {
 		assertEquals(product1.getId(), updatedProduct.getId());
 		assertEquals(200, updatedProduct.getPrice());
 
-		assertThrows(DeliveryException.class, () -> this.service.updateProductPrice(new Long(999), 200f), "No existe el producto a actualizar");
+		assertThrows(DeliveryException.class, () -> this.service.updateProductPrice(999L, 200f), "No existe el producto a actualizar");
 	}
 
 	@Test
@@ -284,7 +284,7 @@ public class DeliveryServiceTests {
 		assertFalse(this.service.addDeliveryManToOrder(order.getId(), deliveryMan)); // La orden no tiene items.
 		Item item = this.service.addItemToOrder(order.getId(), product1, 3, "");
 		assertFalse(this.service.addDeliveryManToOrder(order.getId(), deliveryMan1)); // El DM no esta free.
-		assertThrows(DeliveryException.class, () -> this.service.addDeliveryManToOrder(new Long(50), deliveryMan), "No existe la orden");
+		assertThrows(DeliveryException.class, () -> this.service.addDeliveryManToOrder(50L, deliveryMan), "No existe la orden");
 		assertTrue(this.service.addDeliveryManToOrder(order.getId(), deliveryMan));
 		DeliveryMan updatedDeliveryMan = (DeliveryMan) this.service.getUserById(deliveryMan.getId()).orElse(null);
 		assertFalse(updatedDeliveryMan.isFree());

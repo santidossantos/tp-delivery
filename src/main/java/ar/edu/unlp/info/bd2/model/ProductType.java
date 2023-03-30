@@ -36,4 +36,7 @@ public class ProductType {
         this.products = products;
     }
 
+    public Long getId() {
+        return null;
+    }
 }

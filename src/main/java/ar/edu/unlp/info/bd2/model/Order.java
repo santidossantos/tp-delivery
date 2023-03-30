@@ -104,4 +104,8 @@ public class Order {
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
     }
+
+    public Long getId() {
+        return null;
+    }
 }

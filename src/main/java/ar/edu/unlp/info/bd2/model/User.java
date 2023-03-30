@@ -76,4 +76,8 @@ public abstract class User {
         this.score = score;
     }
 
+    public Long getId() {
+        return null;
+    }
+
 }
