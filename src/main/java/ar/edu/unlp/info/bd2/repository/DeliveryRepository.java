@@ -14,10 +14,10 @@ public class DeliveryRepository {
     @Autowired
     SessionFactory sessionFactory;
 
-
+    // Esto es lo que hay que hacer mas o menos segun Luciana
     public void save(Client c) throws DeliveryException {
         try{
-            this.sessionFactory.getCurrentSession().save(c);
+            this.sessionFactory.getCurrentSession().save(c); // podemos facotorizar el metodo save... ?
 
         } catch (Exception e) {
             throw new DeliveryException(e.getMessage());
