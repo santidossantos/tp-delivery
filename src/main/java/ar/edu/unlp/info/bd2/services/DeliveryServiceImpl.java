@@ -25,9 +25,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        Client c = new Client();
-        deliveryRepository.save(c);
-        return c;
+        return null;
     }
 
     @Override
@@ -57,7 +55,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        return null;
+        Address anAddress = new Address(name, address, apartment, coordX, coordY, description, client);
+        this.deliveryRepository.save(anAddress);
+        return anAddress;
     }
 
     @Override

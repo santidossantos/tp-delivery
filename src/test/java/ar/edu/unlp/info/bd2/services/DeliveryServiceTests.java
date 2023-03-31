@@ -43,8 +43,9 @@ public class DeliveryServiceTests {
 	}
 
 	@Test
-	void initialTest() {
-		// Probar correcta conexión con la BD y creación de entidades
+	void initialTest() throws DeliveryException {
+		// Crea una direccion y prueba que se guarde
+		this.service.createAddress("Direccion Nombre", "Calle 58", "Depto 1", 10, 20, "Descripcion", null);
 	}
 
 	@Test

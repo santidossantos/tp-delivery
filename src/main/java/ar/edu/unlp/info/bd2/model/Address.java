@@ -1,7 +1,17 @@
 package ar.edu.unlp.info.bd2.model;
 
 
+import javax.persistence.*;
+import static javax.persistence.GenerationType.IDENTITY;
+
+@Entity
+@Table(name = "addresses")
 public class Address {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
     private String name;
 
@@ -15,7 +25,24 @@ public class Address {
 
     private String description;
 
-    private Client client;
+    //private Client client; comentado porque rompe todo
+
+    public Address() {
+
+    }
+
+    public Address(String name, String address, String apartment, float coordX, float coordY, String description, Client client) {
+        this.name = name;
+        this.address = address;
+        this.apartment = apartment;
+        this.coordX = coordX;
+        this.coordY = coordY;
+        this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -41,22 +68,6 @@ public class Address {
         this.apartment = apartment;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
     public float getCoordX() {
         return coordX;
     }
@@ -73,7 +84,12 @@ public class Address {
         this.coordY = coordY;
     }
 
-    public Long getId() {
-        return null;
+    public String getDescription() {
+        return description;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }
