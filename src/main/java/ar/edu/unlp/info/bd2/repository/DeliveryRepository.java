@@ -15,7 +15,8 @@ public class DeliveryRepository {
     SessionFactory sessionFactory;
 
     /**
-     * Save generico para todos
+     * Guarda un objeto en la BD usando la session
+     * @param obj entidad del modelo
      */
     public void save(Object obj) {
         Session session = this.sessionFactory.getCurrentSession();
