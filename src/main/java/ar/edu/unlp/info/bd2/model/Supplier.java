@@ -1,8 +1,19 @@
 package ar.edu.unlp.info.bd2.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+@Entity
+@Table(name = "suppliers")
 public class Supplier {
+
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
     private String name;
 
@@ -14,8 +25,8 @@ public class Supplier {
 
     private float coordY;
 
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
-
 
     public String getName() {
         return name;

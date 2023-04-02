@@ -8,6 +8,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
+
 @Repository
 public class DeliveryRepository {
 
@@ -19,7 +21,7 @@ public class DeliveryRepository {
      * @param obj entidad del modelo
      */
     public void save(Object obj) {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         session.save(obj);
         session.getTransaction().commit();
     }

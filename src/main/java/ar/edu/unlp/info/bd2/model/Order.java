@@ -1,9 +1,19 @@
 package ar.edu.unlp.info.bd2.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+@Entity
+@Table(name = "orders")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
     private int number;
 
@@ -15,14 +25,21 @@ public class Order {
 
     private boolean delivered;
 
+    @ManyToOne
+    @JoinColumn(name = "delivery_man_id")
     private DeliveryMan deliveryMan;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Qualification qualification;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Address address;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items;
 
     public int getNumber() {

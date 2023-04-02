@@ -1,9 +1,19 @@
 package ar.edu.unlp.info.bd2.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+@Entity
+@Table(name = "products")
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
     private String name;
 
@@ -15,8 +25,11 @@ public class Product {
 
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    @ManyToMany(mappedBy = "products")
     private List<ProductType> types;
 
     public void setName(String name) {

@@ -25,7 +25,13 @@ public class Address {
 
     private String description;
 
-    //private Client client; comentado porque rompe todo
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    public Client getClient() {
+        return client;
+    }
 
     public Address() {
 
