@@ -46,7 +46,7 @@ public class HibernateConfiguration {
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create");
-        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
+        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.format_sql", "true");
         hibernateProperties.setProperty("hibernate.use_sql_comments", "false");

@@ -10,7 +10,6 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
     private int quantity;

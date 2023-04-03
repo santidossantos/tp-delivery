@@ -11,7 +11,6 @@ public class ProductType {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
     private String name;

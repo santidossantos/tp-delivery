@@ -5,6 +5,7 @@ import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -53,16 +54,15 @@ public class DeliveryServiceImpl implements DeliveryService {
         return null;
     }
 
-    @Override
+    @Transactional
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
         Address anAddress = new Address(name, address, apartment, coordX, coordY, description, client);
         this.deliveryRepository.save(anAddress);
         return anAddress;
     }
 
-    @Override
     public Address createAddress(String name, String address, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        return null;
+       return null;
     }
 
     @Override

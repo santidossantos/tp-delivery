@@ -10,7 +10,6 @@ public class Qualification {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
     private float score; //De 1 a 5 estrellas

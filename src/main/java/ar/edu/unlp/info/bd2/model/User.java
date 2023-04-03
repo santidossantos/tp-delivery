@@ -4,17 +4,15 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity(name="users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type",
-        discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class User {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
     private String name;
