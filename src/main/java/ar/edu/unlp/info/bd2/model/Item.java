@@ -1,14 +1,27 @@
 package ar.edu.unlp.info.bd2.model;
 
+import javax.persistence.*;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+@Entity
+@Table(name = "items")
 public class Item {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    private Long id;
 
     private int quantity;
 
     private String description;
 
+    @ManyToOne()
+    @JoinColumn(name = "order_id")
     private Order order;
 
+    @JoinColumn(name = "product_id")
+    @OneToOne(fetch = FetchType.LAZY)
     private Product product;
 
 

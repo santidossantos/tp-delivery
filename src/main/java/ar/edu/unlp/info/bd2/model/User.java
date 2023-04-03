@@ -1,8 +1,19 @@
 package ar.edu.unlp.info.bd2.model;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import static javax.persistence.GenerationType.IDENTITY;
 
+@Entity(name="users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class User {
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    private Long id;
 
     private String name;
 
@@ -15,6 +26,10 @@ public abstract class User {
     private Date dateOfBirth;
 
     private int score;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "client_id")
+    private List<Order> orders = new ArrayList<>();
 
     public User() {
     }

@@ -13,19 +13,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
-
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {AppConfig.class, HibernateConfiguration.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
-@Rollback(true)
+@Rollback
 public class DeliveryServiceTests {
 
 	@Autowired
 	DeliveryService service;
+
+	@Autowired
+	DataSource dataSource;
 
 	private Date dob1;
 	private Date dob2;
@@ -43,9 +47,10 @@ public class DeliveryServiceTests {
 	}
 
 	@Test
-	void initialTest() throws DeliveryException {
-		// Crea una direccion y prueba que se guarde
-		this.service.createAddress("Direccion Nombre", "Calle 58", "Depto 1", 10, 20, "Descripcion", null);
+	void initialTest() throws SQLException {
+		Connection connection = dataSource.getConnection();
+		assertNotNull(connection);
+		connection.close();
 	}
 
 	@Test
@@ -107,6 +112,7 @@ public class DeliveryServiceTests {
 		Address address2 = this.service.createAddress("Direccion 2", "Calle 50 n5000", "12D", 24.845f, 65.084f, "Direccion Casa", client);
 		assertNotNull(address2.getId());
 		assertEquals("Calle 50 n5000", address2.getAddress());
+		System.out.println(client.getAddresses());
 		assertTrue(client.getAddresses().contains(address1));
 		assertTrue(client.getAddresses().contains(address2));
 	}

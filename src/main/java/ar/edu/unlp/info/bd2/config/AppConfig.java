@@ -2,6 +2,9 @@ package ar.edu.unlp.info.bd2.config;
 
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
 import ar.edu.unlp.info.bd2.services.*;
+import org.hibernate.FlushMode;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

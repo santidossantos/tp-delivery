@@ -1,17 +1,25 @@
 package ar.edu.unlp.info.bd2.model;
 
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("1")
 public class Client extends User{
 
     private Date dateOfRegister;
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
-    private List<Order> orders = new ArrayList<>();
+    public Client() {}
 
+    public Client(String name, String username, String password, String email, Date dateOfBirth) {
+        super(name, username, password, email, dateOfBirth);
+    }
 
     public Date getDateOfRegister() {
         return dateOfRegister;
@@ -27,14 +35,6 @@ public class Client extends User{
 
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
 }

@@ -10,7 +10,6 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
     private String name;
@@ -25,19 +24,24 @@ public class Address {
 
     private String description;
 
-    //private Client client; comentado porque rompe todo
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Client client;
 
-    public Address() {
+    public Address() {}
 
-    }
-
-    public Address(String name, String address, String apartment, float coordX, float coordY, String description, Client client) {
+    public Address(String name, String address, float coordX, float coordY, String description, Client client) {
         this.name = name;
         this.address = address;
-        this.apartment = apartment;
         this.coordX = coordX;
         this.coordY = coordY;
         this.description = description;
+        this.client = client;
+    }
+
+    public Address(String name, String address, String apartment, float coordX, float coordY, String description, Client client) {
+        this(name, address, coordX, coordY, description, client);
+        this.apartment = apartment;
     }
 
     public Long getId() {
@@ -90,6 +94,14 @@ public class Address {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
 }
