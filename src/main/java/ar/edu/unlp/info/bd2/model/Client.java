@@ -37,4 +37,8 @@ public class Client extends User{
         this.addresses = addresses;
     }
 
+    public void addAddress(Address address) {
+        this.addresses.add(address);
+    }
+
 }

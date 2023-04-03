@@ -50,6 +50,7 @@ public class DeliveryServiceImpl implements DeliveryService {
    @Transactional
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
        Address anAddress = new Address(name, address, apartment, coordX, coordY, description, client);
+       client.addAddress(anAddress);   // PREGUNTAR SI ES NECESARIO PARA MANTENER CONSISTENCIA
        this.deliveryRepository.save(anAddress);
        return anAddress;
     }
@@ -61,6 +62,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public Address createAddress(String name, String address, float coordX, float coordY, String description, Client client) throws DeliveryException {
         Address anAddress = new Address(name, address, coordX, coordY, description, client);
+        client.addAddress(anAddress);   // PREGUNTAR SI ES NECESARIO PARA MANTENER CONSISTENCIA
         this.deliveryRepository.save(anAddress);
         return anAddress;
     }
