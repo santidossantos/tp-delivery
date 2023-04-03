@@ -45,7 +45,7 @@ public class DeliveryServiceTests {
 	@Test
 	void initialTest() throws DeliveryException {
 		// Crea una direccion y prueba que se guarde
-		this.service.createAddress("Direccion Nombre", "Calle 58", "Depto 1", 10, 20, "Descripcion", null);
+		this.service.createAddress("Direccion Nombre", "Calle 60", "Depto 1", 10, 20, "Descripcion", null);
 	}
 
 	@Test

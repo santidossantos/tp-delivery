@@ -17,7 +17,6 @@ public class DeliveryRepository {
 
     public void save(Object obj) {
         this.getSession().save(obj);
-        //this.getSession().getTransaction().commit();
     }
 
 }
