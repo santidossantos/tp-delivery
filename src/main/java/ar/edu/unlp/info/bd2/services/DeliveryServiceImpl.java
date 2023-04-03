@@ -20,8 +20,11 @@ public class DeliveryServiceImpl implements DeliveryService {
         this.deliveryRepository = deliveryRepository;
     }
 
+    @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return null;
+        Client client = new Client(name, username, password, email, dateOfBirth);
+        deliveryRepository.save(client);
+        return client;
     }
 
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
@@ -46,13 +49,20 @@ public class DeliveryServiceImpl implements DeliveryService {
 
    @Transactional
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        Address anAddress = new Address(name, address, apartment, coordX, coordY, description, client);
-        this.deliveryRepository.save(anAddress);
-        return anAddress;
+       Address anAddress = new Address(name, address, apartment, coordX, coordY, description, client);
+       this.deliveryRepository.save(anAddress);
+       return anAddress;
     }
 
+
+    /**
+     * Es lo mismo que el de arriba sin el departamento
+     */
+    @Transactional
     public Address createAddress(String name, String address, float coordX, float coordY, String description, Client client) throws DeliveryException {
-       return null;
+        Address anAddress = new Address(name, address, coordX, coordY, description, client);
+        this.deliveryRepository.save(anAddress);
+        return anAddress;
     }
 
     public Order createOrder(int number, Date dateOfOrder, String comments, Client client, Address address) throws DeliveryException {

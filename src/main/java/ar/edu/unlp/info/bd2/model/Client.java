@@ -12,9 +12,14 @@ public class Client extends User{
 
     private Date dateOfRegister;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "client_id")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
+
+    public Client() {}
+
+    public Client(String name, String username, String password, String email, Date dateOfBirth) {
+        super(name, username, password, email, dateOfBirth);
+    }
 
     public Date getDateOfRegister() {
         return dateOfRegister;
