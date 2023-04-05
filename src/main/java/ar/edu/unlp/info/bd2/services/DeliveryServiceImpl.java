@@ -105,12 +105,12 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Product updateProductPrice(Long id, float price) throws DeliveryException {
-        Product product = this.deliveryRepository.findProductById(id);
-        if (product == null) {
+        Optional<Product> product = this.deliveryRepository.findProductById(id);
+        if (!product.isPresent()) {
             throw new DeliveryException("Product not found");
         }
-        product.setPrice(price); // Pueden generarse inconsistencias, o esta bien hacerlo aca?
-        return this.deliveryRepository.updateProductPrice(product);
+        product.get().setPrice(price);
+        return this.deliveryRepository.updateProductPrice(product.get());
     }
 
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {

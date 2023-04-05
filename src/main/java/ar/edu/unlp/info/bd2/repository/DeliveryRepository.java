@@ -1,13 +1,14 @@
 package ar.edu.unlp.info.bd2.repository;
 
+import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.Product;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
-import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -20,19 +21,24 @@ public class DeliveryRepository {
         return sessionFactory.getCurrentSession();
     }
 
-    public void save(Object obj) {
-        this.getSession().save(obj);
+    public void save(Object obj) throws DeliveryException {
+        try{
+            this.getSession().save(obj);
+        } catch (ConstraintViolationException e) {
+            throw new DeliveryException("mensaje del test");
+        } catch (Exception e) {
+            throw new DeliveryException("mensaje del test 2");
+        }
     }
 
     public void update(Object obj) {
         this.getSession().update(obj);
     }
 
-    public Product findProductById(Long id) {
-        Query query = getSession().createQuery("FROM Product P WHERE P.id = :id");
-        query.setParameter("id", id);
-        List<Product> products = query.getResultList();
-        return !products.isEmpty() ? products.get(query.getFirstResult()) : null;
+    public Optional<Product> findProductById(Long id) {
+        return (Optional<Product>) getSession().createQuery("FROM Product P WHERE P.id = :id")
+                .setParameter("id", id)
+                .uniqueResultOptional();
     }
 
     public Product updateProductPrice(Product product) {
