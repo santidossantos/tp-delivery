@@ -1,13 +1,17 @@
 package ar.edu.unlp.info.bd2.services;
 
-import ar.edu.unlp.info.bd2.DeliveryException;
+import ar.edu.unlp.info.bd2.constants.ConstantValues;
+import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -22,25 +26,36 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
+        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent())
+            throw new DeliveryException(ConstantValues.ERROR_USERNAME);
+
         Client client = new Client(name, username, password, email, dateOfBirth);
-        deliveryRepository.save(client);
+        this.deliveryRepository.save(client);
         return client;
     }
 
+    @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return null;
+        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent())
+            throw new DeliveryException(ConstantValues.ERROR_USERNAME);
+
+        DeliveryMan deliveryMan = new DeliveryMan(name, username, password, email, dateOfBirth);
+        this.deliveryRepository.save(deliveryMan);
+        return deliveryMan;
     }
 
+    @Transactional
     public Optional<User> getUserById(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(deliveryRepository.getUserById(id));
     }
 
+    @Transactional
     public Optional<User> getUserByEmail(String email) {
-        return Optional.empty();
+        return deliveryRepository.getUserByEmail(email.toLowerCase());
     }
 
     public Optional<DeliveryMan> getAFreeDeliveryMan() {
-        return Optional.empty();
+        return Optional.ofNullable(deliveryRepository.getFreeDeliveryMan());
     }
 
     public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
@@ -53,7 +68,6 @@ public class DeliveryServiceImpl implements DeliveryService {
        this.deliveryRepository.save(anAddress);
        return anAddress;
     }
-
 
     /**
      * Es lo mismo que el de arriba sin el departamento
