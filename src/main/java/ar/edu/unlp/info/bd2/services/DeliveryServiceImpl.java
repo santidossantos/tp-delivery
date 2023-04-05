@@ -14,8 +14,6 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     DeliveryRepository deliveryRepository;
 
-    public DeliveryServiceImpl() {}
-
     public DeliveryServiceImpl(DeliveryRepository deliveryRepository) {
         this.deliveryRepository = deliveryRepository;
     }
@@ -105,8 +103,14 @@ public class DeliveryServiceImpl implements DeliveryService {
         return null;
     }
 
+    @Transactional
     public Product updateProductPrice(Long id, float price) throws DeliveryException {
-        return null;
+        Product product = this.deliveryRepository.findProductById(id);
+        if (product == null) {
+            throw new DeliveryException("Product not found");
+        }
+        product.setPrice(price); // Pueden generarse inconsistencias, o esta bien hacerlo aca?
+        return this.deliveryRepository.updateProductPrice(product);
     }
 
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
