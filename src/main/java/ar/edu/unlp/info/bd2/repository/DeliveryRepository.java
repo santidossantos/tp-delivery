@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.repository;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
+import ar.edu.unlp.info.bd2.model.DeliveryMan;
 import ar.edu.unlp.info.bd2.model.Product;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -40,16 +41,20 @@ public class DeliveryRepository {
         }
     }
 
-
     public Optional<Product> findProductById(Long id) {
         return (Optional<Product>) getSession().createQuery("FROM Product P WHERE P.id = :id")
                 .setParameter("id", id)
                 .uniqueResultOptional();
     }
 
-    public Product updateProductPrice(Product product) {
-        getSession().update(product);
+    public Product updateProductPrice(Product product) throws DeliveryException {
+        this.update(product);
         return product;
     }
-    
+
+    public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
+        this.update(deliveryMan1);
+        return deliveryMan1;
+    }
+
 }

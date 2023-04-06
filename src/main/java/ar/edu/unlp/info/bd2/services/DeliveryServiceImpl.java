@@ -42,7 +42,8 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
-        return null;
+        this.deliveryRepository.update(deliveryMan1);
+        return deliveryMan1;
     }
 
    @Transactional
@@ -52,10 +53,6 @@ public class DeliveryServiceImpl implements DeliveryService {
        return anAddress;
     }
 
-
-    /**
-     * Es lo mismo que el de arriba sin el departamento
-     */
     @Transactional
     public Address createAddress(String name, String address, float coordX, float coordY, String description, Client client) throws DeliveryException {
         Address anAddress = new Address(name, address, coordX, coordY, description, client);

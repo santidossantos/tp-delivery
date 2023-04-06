@@ -50,4 +50,5 @@ public class DeliveryMan extends User {
     public void setFree(boolean free) {
         this.free = free;
     }
+
 }
