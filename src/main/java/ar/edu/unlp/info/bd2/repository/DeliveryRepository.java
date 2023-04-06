@@ -1,6 +1,8 @@
 package ar.edu.unlp.info.bd2.repository;
 
 import ar.edu.unlp.info.bd2.model.DeliveryMan;
+import ar.edu.unlp.info.bd2.model.Product;
+import ar.edu.unlp.info.bd2.model.ProductType;
 import ar.edu.unlp.info.bd2.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -49,6 +51,23 @@ public class DeliveryRepository {
 
         Random rand = new Random();
         return (DeliveryMan) list.get(rand.nextInt(list.size()));
+    }
+
+    public Product getProductById(Long id){
+        return sessionFactory.getCurrentSession().get(Product.class, id);
+    }
+
+    public List<Product> getProductByName(String name) {
+        Query<Product> query = getSession().createQuery("select p from Product p where p.name like :name", Product.class);
+        query.setParameter("name", '%' + name + '%');
+        return query.getResultList();
+    }
+
+    public List<Product> getProductsByType(String type){
+        Query<Product> query = getSession().createQuery("select p from Product p join p.types t where t.name like :type", Product.class);
+        query.setParameter("type", '%' + type + '%');
+        List<Product> listpr = query.getResultList();
+        return query.getResultList();
     }
 
 }

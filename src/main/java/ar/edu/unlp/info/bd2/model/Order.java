@@ -53,6 +53,14 @@ public class Order {
         return dateOfOrder;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setDateOfOrder(Date dateOfOrder) {
         this.dateOfOrder = dateOfOrder;
     }
@@ -121,7 +129,5 @@ public class Order {
         this.delivered = delivered;
     }
 
-    public Long getId() {
-        return null;
-    }
+
 }

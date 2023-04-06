@@ -15,6 +15,14 @@ public class ProductType {
 
     private String name;
 
+    public ProductType() {
+    }
+
+    public ProductType(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     private String description;
 
     @ManyToMany(cascade = {
@@ -54,6 +62,10 @@ public class ProductType {
     }
 
     public Long getId() {
-        return null;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

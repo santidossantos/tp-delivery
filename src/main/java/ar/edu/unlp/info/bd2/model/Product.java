@@ -24,6 +24,32 @@ public class Product {
 
     private String description;
 
+
+    public Product() {
+    }
+
+    public Product(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) {
+        this.name = name;
+        this.price = price;
+        this.weight = weight;
+        this.description = description;
+        this.supplier = supplier;
+        this.types = types;
+        this.lastPriceUpdateDate = new Date();
+    }
+
+    public Product(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) {
+        this.name = name;
+        this.price = price;
+        this.lastPriceUpdateDate = lastPriceUpdateDate;
+        this.weight = weight;
+        this.description = description;
+        this.supplier = supplier;
+        this.types = types;
+        this.lastPriceUpdateDate = new Date();
+    }
+
+
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
@@ -45,6 +71,11 @@ public class Product {
 
     public float getWeight() {
         return weight;
+    }
+
+
+    public String getName() {
+        return name;
     }
 
     public void setWeight(float weight) {
@@ -84,10 +115,10 @@ public class Product {
     }
 
     public Long getId() {
-        return null;
+        return id;
     }
 
-    public String getName() {
-        return null;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -20,6 +20,13 @@ public class Qualification {
     @OneToOne(fetch = FetchType.LAZY)
     private Order order;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public float getScore() {
         return score;
@@ -45,7 +52,5 @@ public class Qualification {
         this.order = order;
     }
 
-    public Long getId() {
-        return null;
-    }
+
 }
