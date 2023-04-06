@@ -25,17 +25,8 @@ public class ProductType {
 
     private String description;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(
-            name = "product_type_product",
-            joinColumns = {@JoinColumn(name = "product_type_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_id")}
-    )
+    @ManyToMany
     private List<Product> products;
-
 
     public String getName() {
         return name;

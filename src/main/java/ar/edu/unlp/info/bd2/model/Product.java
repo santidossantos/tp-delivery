@@ -24,9 +24,19 @@ public class Product {
 
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
-    public Product() {
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "products_productstypes",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_type_id")
+    )
+    private List<ProductType> types;
+
+    public Product() {}
 
     public Product(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) {
         this.name = name;
@@ -39,23 +49,9 @@ public class Product {
     }
 
     public Product(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) {
-        this.name = name;
-        this.price = price;
+        this(name, price, weight, description, supplier, types);
         this.lastPriceUpdateDate = lastPriceUpdateDate;
-        this.weight = weight;
-        this.description = description;
-        this.supplier = supplier;
-        this.types = types;
-        this.lastPriceUpdateDate = new Date();
     }
-
-
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
-
-    @ManyToMany(mappedBy = "products")
-    private List<ProductType> types;
 
     public void setName(String name) {
         this.name = name;
@@ -121,4 +117,5 @@ public class Product {
     public void setId(Long id) {
         this.id = id;
     }
+
 }
