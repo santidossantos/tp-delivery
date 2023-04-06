@@ -37,7 +37,7 @@ public class Address {
         this.coordY = coordY;
         this.description = description;
         this.client = client;
-        this.client.addAddress(this); // Preguntar si es necesario para mantener la consistencia de la relacion
+        this.client.addAddress(this);
     }
 
     public Address(String name, String address, String apartment, float coordX, float coordY, String description, Client client) {

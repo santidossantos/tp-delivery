@@ -92,7 +92,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     public Optional<Product> getProductById(Long id) {
-        return Optional.empty();
+        return deliveryRepository.findProductById(id);
     }
 
     public List<Product> getProductByName(String name) {
@@ -105,9 +105,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Product updateProductPrice(Long id, float price) throws DeliveryException {
-        Optional<Product> product = this.deliveryRepository.findProductById(id);
+        Optional<Product> product = this.getProductById(id);
         if (!product.isPresent()) {
-            throw new DeliveryException("Product not found");
+            throw new DeliveryException("No existe el producto a actualizar");
         }
         product.get().setPrice(price);
         return this.deliveryRepository.updateProductPrice(product.get());

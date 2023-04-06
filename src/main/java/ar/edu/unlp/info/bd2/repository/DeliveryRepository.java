@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 
 
@@ -25,15 +24,22 @@ public class DeliveryRepository {
         try{
             this.getSession().save(obj);
         } catch (ConstraintViolationException e) {
-            throw new DeliveryException("mensaje del test");
+            throw new DeliveryException("Constraint Violation");
         } catch (Exception e) {
-            throw new DeliveryException("mensaje del test 2");
+            throw new DeliveryException(e.getMessage());
         }
     }
 
-    public void update(Object obj) {
-        this.getSession().update(obj);
+    public void update(Object obj) throws DeliveryException {
+        try{
+            this.getSession().update(obj);
+        } catch (ConstraintViolationException e) {
+            throw new DeliveryException("Constraint Violation");
+        } catch (Exception e) {
+            throw new DeliveryException(e.getMessage());
+        }
     }
+
 
     public Optional<Product> findProductById(Long id) {
         return (Optional<Product>) getSession().createQuery("FROM Product P WHERE P.id = :id")
@@ -42,7 +48,7 @@ public class DeliveryRepository {
     }
 
     public Product updateProductPrice(Product product) {
-        getSession().update(product); // Hay que hacer eso o con HQL?
+        getSession().update(product);
         return product;
     }
     

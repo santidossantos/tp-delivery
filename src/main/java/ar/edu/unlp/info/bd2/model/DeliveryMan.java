@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("2")
-public class DeliveryMan extends User{
+public class DeliveryMan extends User {
 
     private int numberOfSuccessOrders;
 
