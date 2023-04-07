@@ -47,8 +47,7 @@ public abstract class User {
     @JoinColumn(name = "client_id")
     private List<Order> orders = new ArrayList<>();
 
-    public User() {
-    }
+    public User() {}
 
     public User(String name, String username, String password, String email, Date dateOfBirth) {
         this.name = name;
@@ -106,7 +105,5 @@ public abstract class User {
     public void setScore(int score) {
         this.score = score;
     }
-
-
 
 }

@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.UPDATE_PRODUCT_ERROR;
 
 
 @Service
@@ -50,10 +51,12 @@ public class DeliveryServiceImpl implements DeliveryService {
         return deliveryRepository.getUserByEmail(email.toLowerCase());
     }
 
+    @Transactional
     public Optional<DeliveryMan> getAFreeDeliveryMan() {
         return Optional.ofNullable(deliveryRepository.getFreeDeliveryMan());
     }
 
+    @Transactional
     public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
         this.deliveryRepository.update(deliveryMan1);
         return deliveryMan1;
@@ -134,7 +137,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     public Product updateProductPrice(Long id, float price) throws DeliveryException {
         Optional<Product> product = this.getProductById(id);
         if (!product.isPresent()) {
-            throw new DeliveryException("No existe el producto a actualizar");
+            throw new DeliveryException(UPDATE_PRODUCT_ERROR);
         }
         product.get().setPrice(price);
         return this.deliveryRepository.updateProductPrice(product.get());

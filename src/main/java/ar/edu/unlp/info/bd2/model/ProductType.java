@@ -15,8 +15,7 @@ public class ProductType {
 
     private String name;
 
-    public ProductType() {
-    }
+    public ProductType() {}
 
     public ProductType(String name, String description) {
         this.name = name;

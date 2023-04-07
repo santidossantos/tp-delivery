@@ -1,24 +1,20 @@
 package ar.edu.unlp.info.bd2.repository;
 
-import ar.edu.unlp.info.bd2.DeliveryException;
+import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
 import ar.edu.unlp.info.bd2.model.DeliveryMan;
 import ar.edu.unlp.info.bd2.model.Product;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
-import ar.edu.unlp.info.bd2.model.DeliveryMan;
-import ar.edu.unlp.info.bd2.model.Product;
-import ar.edu.unlp.info.bd2.model.ProductType;
 import ar.edu.unlp.info.bd2.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import org.hibernate.query.Query;
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.CONSTRAINT_ERROR;
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.USERNAME_ERROR;
 
 @Repository
 public class DeliveryRepository {
@@ -31,29 +27,24 @@ public class DeliveryRepository {
     }
 
     public void save(Object obj) throws DeliveryException {
-        try{
+        try {
             this.getSession().save(obj);
         } catch (ConstraintViolationException e) {
-            throw new DeliveryException("Constraint Violation");
+            throw new DeliveryException(CONSTRAINT_ERROR);
         } catch (Exception e) {
-            throw new DeliveryException(e.getMessage());
+            throw new DeliveryException(USERNAME_ERROR);
         }
     }
 
     public void update(Object obj) throws DeliveryException {
-        try{
+        try {
             this.getSession().update(obj);
+            this.getSession().getTransaction().commit(); // Tengo que forzar commit para que se guarde en la bd ;(
         } catch (ConstraintViolationException e) {
-            throw new DeliveryException("Constraint Violation");
+            throw new DeliveryException(CONSTRAINT_ERROR);
         } catch (Exception e) {
-            throw new DeliveryException(e.getMessage());
+            throw new DeliveryException(USERNAME_ERROR);
         }
-    }
-
-    public Optional<Product> findProductById(Long id) {
-        return (Optional<Product>) getSession().createQuery("FROM Product P WHERE P.id = :id")
-                .setParameter("id", id)
-                .uniqueResultOptional();
     }
 
     public Product updateProductPrice(Product product) throws DeliveryException {
@@ -67,7 +58,7 @@ public class DeliveryRepository {
     }
 
     public User getUserById(Long id) {
-        return sessionFactory.getCurrentSession().get(User.class, id);
+        return getSession().get(User.class, id);
     }
 
     public Optional<User> getUserByUsername(String username) {
@@ -86,13 +77,12 @@ public class DeliveryRepository {
         Query<User> query = getSession().createQuery("select u from users u where u.free = :free", User.class);
         query.setParameter("free", true);
         List<User> list = query.getResultList();
-
         Random rand = new Random();
         return (DeliveryMan) list.get(rand.nextInt(list.size()));
     }
 
     public Product getProductById(Long id){
-        return sessionFactory.getCurrentSession().get(Product.class, id);
+        return getSession().get(Product.class, id);
     }
 
     public List<Product> getProductByName(String name) {

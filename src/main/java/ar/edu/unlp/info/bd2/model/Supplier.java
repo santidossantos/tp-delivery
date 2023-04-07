@@ -9,7 +9,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "suppliers")
 public class Supplier {
 
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -24,8 +23,7 @@ public class Supplier {
 
     private float coordY;
 
-    public Supplier() {
-    }
+    public Supplier() {}
 
     public Supplier(String name, String cuit, String address, float coordX, float coordY) {
         this.name = name;
@@ -102,4 +100,5 @@ public class Supplier {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
 }

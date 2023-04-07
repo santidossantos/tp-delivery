@@ -32,6 +32,7 @@ public class Item {
     @OneToOne(fetch = FetchType.LAZY)
     private Product product;
 
+    public Item() {}
 
     public int getQuantity() {
         return quantity;
@@ -64,6 +65,5 @@ public class Item {
     public void setProduct(Product product) {
         this.product = product;
     }
-
 
 }
