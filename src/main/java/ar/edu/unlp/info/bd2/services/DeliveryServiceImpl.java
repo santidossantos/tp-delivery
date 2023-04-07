@@ -85,14 +85,17 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Transactional
-    public Supplier createSupplier(String name, String cuil, String address, float coordX, float coordY) throws DeliveryException {
-        Supplier supplier = new Supplier(name, cuil, address, coordX, coordY);
+    public Supplier createSupplier(String name, String cuit, String address, float coordX, float coordY) throws DeliveryException {
+        if (deliveryRepository.getSupplierByCUIL(cuit).isPresent()){
+            throw new DeliveryException(ConstantValues.USERNAME_ERROR);
+        }
+        Supplier supplier = new Supplier(name, cuit, address, coordX, coordY);
         this.deliveryRepository.save(supplier);
         return supplier;
     }
 
     public List<Supplier> getSupplierByName(String name) {
-        return null;
+        return deliveryRepository.getSupplierByName(name);
     }
 
     @Transactional

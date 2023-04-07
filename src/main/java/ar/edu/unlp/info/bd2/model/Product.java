@@ -28,11 +28,11 @@ public class Product {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
             name = "products_productstypes",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_type_id")
+            inverseJoinColumns = @JoinColumn(name = "producttype_id")
     )
     private List<ProductType> types;
 

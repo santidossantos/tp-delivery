@@ -3,6 +3,7 @@ package ar.edu.unlp.info.bd2.repository;
 import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
 import ar.edu.unlp.info.bd2.model.DeliveryMan;
 import ar.edu.unlp.info.bd2.model.Product;
+import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -81,7 +82,7 @@ public class DeliveryRepository {
         return (DeliveryMan) list.get(rand.nextInt(list.size()));
     }
 
-    public Product getProductById(Long id){
+    public Product getProductById(Long id) {
         return getSession().get(Product.class, id);
     }
 
@@ -91,11 +92,22 @@ public class DeliveryRepository {
         return query.getResultList();
     }
 
-    public List<Product> getProductsByType(String type){
+    public List<Product> getProductsByType(String type) {
         Query<Product> query = getSession().createQuery("select p from Product p join p.types t where t.name like :type", Product.class);
         query.setParameter("type", '%' + type + '%');
-        List<Product> listpr = query.getResultList();
         return query.getResultList();
+    }
+
+    public List<Supplier> getSupplierByName(String name) {
+        Query<Supplier> query = getSession().createQuery("from Supplier s where s.name like :name", Supplier.class);
+        query.setParameter("name", '%' + name + '%');
+        return query.getResultList();
+    }
+
+    public Optional<Supplier> getSupplierByCUIL(String cuit) {
+        Query<Supplier> query = getSession().createQuery("from Supplier s where s.cuit = :cuit", Supplier.class);
+        query.setParameter("cuit", cuit);
+        return query.uniqueResultOptional();
     }
 
 }

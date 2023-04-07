@@ -24,7 +24,7 @@ public class ProductType {
 
     private String description;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "types")
     private List<Product> products;
 
     public String getName() {
