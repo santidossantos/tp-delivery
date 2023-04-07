@@ -15,6 +15,15 @@ public class DeliveryMan extends User {
 
     private boolean free;
 
+    public DeliveryMan(String name, String username, String password, String email, Date dateOfBirth) {
+        super(name, username, password, email, dateOfBirth);
+        this.numberOfSuccessOrders = 0;
+        this.dateOfAdmission = new Date();
+        this.free = true;
+        this.orders = new ArrayList<Order>() {
+        };
+    }
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "deliveryman_id")
     private List<Order> orders = new ArrayList<>();

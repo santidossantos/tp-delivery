@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.services;
 
-import ar.edu.unlp.info.bd2.DeliveryException;
+import ar.edu.unlp.info.bd2.constants.ConstantValues;
+import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -20,25 +22,36 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
+        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent())
+            throw new DeliveryException(ConstantValues.USERNAME_ERROR);
+
         Client client = new Client(name, username, password, email, dateOfBirth);
-        deliveryRepository.save(client);
+        this.deliveryRepository.save(client);
         return client;
     }
 
+    @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return null;
+        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent())
+            throw new DeliveryException(ConstantValues.USERNAME_ERROR);
+
+        DeliveryMan deliveryMan = new DeliveryMan(name, username, password, email, dateOfBirth);
+        this.deliveryRepository.save(deliveryMan);
+        return deliveryMan;
     }
 
+    @Transactional
     public Optional<User> getUserById(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(deliveryRepository.getUserById(id));
     }
 
+    @Transactional
     public Optional<User> getUserByEmail(String email) {
-        return Optional.empty();
+        return deliveryRepository.getUserByEmail(email.toLowerCase());
     }
 
     public Optional<DeliveryMan> getAFreeDeliveryMan() {
-        return Optional.empty();
+        return Optional.ofNullable(deliveryRepository.getFreeDeliveryMan());
     }
 
     public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
@@ -68,36 +81,53 @@ public class DeliveryServiceImpl implements DeliveryService {
         return Optional.empty();
     }
 
+    @Transactional
     public Supplier createSupplier(String name, String cuil, String address, float coordX, float coordY) throws DeliveryException {
-        return null;
+        Supplier supplier = new Supplier(name, cuil, address, coordX, coordY);
+        this.deliveryRepository.save(supplier);
+        return supplier;
     }
 
     public List<Supplier> getSupplierByName(String name) {
         return null;
     }
 
+    @Transactional
     public ProductType createProductType(String name, String description) throws DeliveryException {
-        return null;
+        ProductType productType = new ProductType(name, description);
+        this.deliveryRepository.save(productType);
+        return productType;
     }
 
+    @Transactional
     public Product createProduct(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        return null;
+        Product product = new Product(name, price, weight, description, supplier, types);
+        this.deliveryRepository.save(product);
+        return product;
     }
 
+    @Transactional
     public Product createProduct(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        return null;
+        Product product = new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types);
+        this.deliveryRepository.save(product);
+        return product;
     }
 
+    @Transactional
     public Optional<Product> getProductById(Long id) {
-        return deliveryRepository.findProductById(id);
+        return Optional.ofNullable(deliveryRepository.getProductById(id));
     }
 
+    @Transactional
     public List<Product> getProductByName(String name) {
-        return null;
+        return deliveryRepository.getProductByName(name);
     }
 
+    @Transactional
     public List<Product> getProductsByType(String type) throws DeliveryException {
-        return null;
+        List<Product> productsByType = deliveryRepository.getProductsByType(type);
+        if (productsByType == null || productsByType.isEmpty()) throw new DeliveryException(ConstantValues.PRODUCT_ERROR);
+        return productsByType;
     }
 
     @Transactional

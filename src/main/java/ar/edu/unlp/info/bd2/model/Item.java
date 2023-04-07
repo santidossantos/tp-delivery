@@ -12,6 +12,14 @@ public class Item {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private int quantity;
 
     private String description;
@@ -57,7 +65,5 @@ public class Item {
         this.product = product;
     }
 
-    public Long getId() {
-        return null;
-    }
+
 }
