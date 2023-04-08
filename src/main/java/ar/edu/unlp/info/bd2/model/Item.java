@@ -2,6 +2,8 @@ package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -33,6 +35,13 @@ public class Item {
     private Product product;
 
     public Item() {}
+
+    public Item(Order order, Product product, int quantity, String description){
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.description = description;
+    }
 
     public int getQuantity() {
         return quantity;

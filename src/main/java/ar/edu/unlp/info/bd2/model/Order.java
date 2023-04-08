@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +43,19 @@ public class Order {
     private List<Item> items;
 
     public Order() {}
+
+    public Order(int number, Date dateOfOrder, String comments, Client client, Address address) {
+        this.number = number;
+        this.dateOfOrder = dateOfOrder;
+        this.comments = comments;
+        this.client = client;
+        this.address = address;
+        this.items = new ArrayList<>();
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
 
     public int getNumber() {
         return number;
@@ -130,6 +144,4 @@ public class Order {
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
     }
-
-
 }

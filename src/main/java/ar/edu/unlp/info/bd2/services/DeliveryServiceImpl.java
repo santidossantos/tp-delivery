@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import static ar.edu.unlp.info.bd2.constants.ConstantValues.UPDATE_PRODUCT_ERROR;
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.CREATE_ORDER_ERROR;
 
 
 @Service
@@ -76,12 +77,20 @@ public class DeliveryServiceImpl implements DeliveryService {
         return anAddress;
     }
 
+    @Transactional
     public Order createOrder(int number, Date dateOfOrder, String comments, Client client, Address address) throws DeliveryException {
-        return null;
+        Optional<Order> existingOrder = this.deliveryRepository.getOrderByNumber(number);
+        if (existingOrder.isPresent()){
+            throw new DeliveryException(CREATE_ORDER_ERROR);
+        }
+        Order AnOrder = new Order(number, dateOfOrder, comments, client, address);
+        this.deliveryRepository.save(AnOrder);
+        return AnOrder;
     }
 
+
     public Optional<Order> getOrderById(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(deliveryRepository.getOrderById(id));
     }
 
     @Transactional
@@ -158,8 +167,23 @@ public class DeliveryServiceImpl implements DeliveryService {
         return null;
     }
 
+    @Transactional
     public Item addItemToOrder(Long order, Product product, int quantity, String description) throws DeliveryException {
-        return null;
+        Order ord = deliveryRepository.getOrderById(order);
+        if (ord == null) {
+            throw new DeliveryException("No existe una orden con el id " + order);
+        }
+
+        if (ord.isDelivered()) {
+            throw new DeliveryException("La orden con id " + order + " ya fue entregada y no se pueden agregar más items.");
+        }
+
+        Item item = new Item(ord, product, quantity, description);
+        ord.addItem(item);
+        float totalPrice = ord.getTotalPrice() + item.getProduct().getPrice() * item.getQuantity();
+        ord.setTotalPrice(totalPrice);
+        this.deliveryRepository.save(item);
+        return item;
     }
 
 }

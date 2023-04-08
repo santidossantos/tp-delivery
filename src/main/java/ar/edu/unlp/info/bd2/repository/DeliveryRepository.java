@@ -1,10 +1,7 @@
 package ar.edu.unlp.info.bd2.repository;
 
 import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
-import ar.edu.unlp.info.bd2.model.DeliveryMan;
-import ar.edu.unlp.info.bd2.model.Product;
-import ar.edu.unlp.info.bd2.model.Supplier;
-import ar.edu.unlp.info.bd2.model.User;
+import ar.edu.unlp.info.bd2.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
@@ -109,5 +106,16 @@ public class DeliveryRepository {
         query.setParameter("cuit", cuit);
         return query.uniqueResultOptional();
     }
+
+    public Order getOrderById(Long id) {
+        return getSession().get(Order.class, id);
+    }
+
+    public Optional<Order> getOrderByNumber(int number){
+        Query<Order> query = getSession().createQuery("FROM Order o WHERE o.number = :number", Order.class);
+        query.setParameter("number", number);
+        return query.uniqueResultOptional();
+    }
+
 
 }
