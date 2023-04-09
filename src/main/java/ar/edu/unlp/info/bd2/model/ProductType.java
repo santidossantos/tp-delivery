@@ -15,19 +15,17 @@ public class ProductType {
 
     private String name;
 
+    public ProductType() {}
+
+    public ProductType(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     private String description;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(
-            name = "product_type_product",
-            joinColumns = {@JoinColumn(name = "product_type_id")},
-            inverseJoinColumns = {@JoinColumn(name = "product_id")}
-    )
+    @ManyToMany(mappedBy = "types")
     private List<Product> products;
-
 
     public String getName() {
         return name;
@@ -54,6 +52,10 @@ public class ProductType {
     }
 
     public Long getId() {
-        return null;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

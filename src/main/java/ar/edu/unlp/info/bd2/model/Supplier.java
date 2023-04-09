@@ -9,7 +9,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "suppliers")
 public class Supplier {
 
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -23,6 +22,16 @@ public class Supplier {
     private float coordX;
 
     private float coordY;
+
+    public Supplier() {}
+
+    public Supplier(String name, String cuit, String address, float coordX, float coordY) {
+        this.name = name;
+        this.cuit = cuit;
+        this.address = address;
+        this.coordX = coordX;
+        this.coordY = coordY;
+    }
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
@@ -67,7 +76,29 @@ public class Supplier {
         this.coordY = coordY;
     }
 
+
     public Long getId() {
-        return null;
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCuit() {
+        return cuit;
+    }
+
+    public void setCuit(String cuit) {
+        this.cuit = cuit;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
 }

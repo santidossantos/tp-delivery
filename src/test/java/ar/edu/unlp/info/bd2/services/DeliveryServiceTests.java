@@ -1,6 +1,6 @@
 package ar.edu.unlp.info.bd2.services;
 
-import ar.edu.unlp.info.bd2.DeliveryException;
+import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 import ar.edu.unlp.info.bd2.model.*;
@@ -112,7 +112,6 @@ public class DeliveryServiceTests {
 		Address address2 = this.service.createAddress("Direccion 2", "Calle 50 n5000", "12D", 24.845f, 65.084f, "Direccion Casa", client);
 		assertNotNull(address2.getId());
 		assertEquals("Calle 50 n5000", address2.getAddress());
-		System.out.println(client.getAddresses());
 		assertTrue(client.getAddresses().contains(address1));
 		assertTrue(client.getAddresses().contains(address2));
 	}
