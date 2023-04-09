@@ -2,6 +2,8 @@ package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -11,6 +13,14 @@ public class Item {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     private int quantity;
 
@@ -24,6 +34,14 @@ public class Item {
     @OneToOne(fetch = FetchType.LAZY)
     private Product product;
 
+    public Item() {}
+
+    public Item(Order order, Product product, int quantity, String description){
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.description = description;
+    }
 
     public int getQuantity() {
         return quantity;
@@ -57,7 +75,4 @@ public class Item {
         this.product = product;
     }
 
-    public Long getId() {
-        return null;
-    }
 }

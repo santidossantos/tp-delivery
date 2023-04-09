@@ -1,6 +1,5 @@
 package ar.edu.unlp.info.bd2.model;
 
-
 import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -37,6 +36,7 @@ public class Address {
         this.coordY = coordY;
         this.description = description;
         this.client = client;
+        this.client.addAddress(this);
     }
 
     public Address(String name, String address, String apartment, float coordX, float coordY, String description, Client client) {

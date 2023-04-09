@@ -21,6 +21,22 @@ public abstract class User {
 
     private String password;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     private String email;
 
     private Date dateOfBirth;
@@ -31,8 +47,7 @@ public abstract class User {
     @JoinColumn(name = "client_id")
     private List<Order> orders = new ArrayList<>();
 
-    public User() {
-    }
+    public User() {}
 
     public User(String name, String username, String password, String email, Date dateOfBirth) {
         this.name = name;
@@ -89,10 +104,6 @@ public abstract class User {
 
     public void setScore(int score) {
         this.score = score;
-    }
-
-    public Long getId() {
-        return null;
     }
 
 }

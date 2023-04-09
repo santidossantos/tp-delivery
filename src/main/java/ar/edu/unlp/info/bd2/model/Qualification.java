@@ -20,6 +20,22 @@ public class Qualification {
     @OneToOne(fetch = FetchType.LAZY)
     private Order order;
 
+    public Qualification() {}
+
+    public Qualification(float score, String commentary, Order order) {
+        this.score = score;
+        this.commentary = commentary;
+        this.order = order;
+        //this.order.setQualification(this); PREGUNTAR SI ES MEJOR ACA QUE EN EL SERVICE
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public float getScore() {
         return score;
@@ -45,7 +61,4 @@ public class Qualification {
         this.order = order;
     }
 
-    public Long getId() {
-        return null;
-    }
 }

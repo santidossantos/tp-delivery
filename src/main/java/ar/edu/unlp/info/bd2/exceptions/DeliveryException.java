@@ -1,4 +1,4 @@
-package ar.edu.unlp.info.bd2;
+package ar.edu.unlp.info.bd2.exceptions;
 
 public class DeliveryException extends Exception{
 
@@ -16,4 +16,5 @@ public class DeliveryException extends Exception{
     public void setMessage(String message) {
         this.message = message;
     }
+
 }

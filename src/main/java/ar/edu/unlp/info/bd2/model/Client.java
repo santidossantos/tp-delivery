@@ -1,6 +1,5 @@
 package ar.edu.unlp.info.bd2.model;
 
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +18,7 @@ public class Client extends User{
 
     public Client(String name, String username, String password, String email, Date dateOfBirth) {
         super(name, username, password, email, dateOfBirth);
+        this.dateOfRegister = new Date();
     }
 
     public Date getDateOfRegister() {
