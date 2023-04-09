@@ -22,6 +22,13 @@ public class Qualification {
 
     public Qualification() {}
 
+    public Qualification(float score, String commentary, Order order) {
+        this.score = score;
+        this.commentary = commentary;
+        this.order = order;
+        //this.order.setQualification(this); PREGUNTAR SI ES MEJOR ACA QUE EN EL SERVICE
+    }
+
     public Long getId() {
         return id;
     }

@@ -9,8 +9,8 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import static ar.edu.unlp.info.bd2.constants.ConstantValues.UPDATE_PRODUCT_ERROR;
-import static ar.edu.unlp.info.bd2.constants.ConstantValues.CREATE_ORDER_ERROR;
+
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.*;
 
 
 @Service
@@ -155,16 +155,57 @@ public class DeliveryServiceImpl implements DeliveryService {
         return this.deliveryRepository.updateProductPrice(product.get());
     }
 
+    @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
-        return false;
+        Order order1 = this.deliveryRepository.getOrderById(order);
+        if(order1 == null){
+            throw new DeliveryException(ORDER_ERROR);
+        }
+        if(order1.getItems().size() == 0 || !deliveryMan.isFree()) {
+            return false;
+        }
+        order1.setDeliveryMan(deliveryMan);
+        deliveryMan.setFree(false);
+        this.deliveryRepository.update(order1);
+        return true;
     }
 
+    @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
-        return false;
+        Order order1 = this.deliveryRepository.getOrderById(order);
+        if(order1 == null){
+            throw new DeliveryException(ORDER_ERROR);
+        }
+        if(order1.getDeliveryMan() == null){
+            return  false;
+        }
+        order1.setDelivered(true);
+        DeliveryMan deliveryMan = order1.getDeliveryMan();   // TODA ESTA LOGICA VA EN EL SERVICIO?
+        deliveryMan.setFree(true);
+        //deliveryMan.setScore((int) (deliveryMan.getScore() + order1.getQualification().getScore()));
+        deliveryMan.setScore(1);
+        deliveryMan.setNumberOfSuccessOrders(deliveryMan.getNumberOfSuccessOrders() + 1);
+
+        Client client = order1.getClient();
+        client.setScore(client.getScore() + 1);  // PREGUNTAR
+
+        this.deliveryRepository.update(order1);
+        this.deliveryRepository.update(deliveryMan);
+        this.deliveryRepository.update(client);
+        return true;
     }
 
+    // SE COMIERON PASAR LAS ESTRELLAS?
+    @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
-        return null;
+        Order order1 = this.deliveryRepository.getOrderById(order);
+        if(order1 == null || !order1.isDelivered()){
+            throw new DeliveryException(ORDER_ERROR);
+        }
+        Qualification qualification = new Qualification(0, commentary, order1);
+        order1.setQualification(qualification); // RARO EN EL SERVICIO?
+        this.deliveryRepository.save(qualification);
+        return qualification;
     }
 
     @Transactional

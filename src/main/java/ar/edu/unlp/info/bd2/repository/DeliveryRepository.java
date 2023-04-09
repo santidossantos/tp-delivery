@@ -37,11 +37,11 @@ public class DeliveryRepository {
     public void update(Object obj) throws DeliveryException {
         try {
             this.getSession().update(obj);
-            this.getSession().getTransaction().commit(); // Tengo que forzar commit para que se guarde en la bd ;(
+            //this.getSession().getTransaction().commit(); // Tengo que forzar commit para que se guarde en la bd ;(
         } catch (ConstraintViolationException e) {
             throw new DeliveryException(CONSTRAINT_ERROR);
         } catch (Exception e) {
-            throw new DeliveryException(USERNAME_ERROR);
+            throw new DeliveryException(e.getMessage());
         }
     }
 
@@ -75,8 +75,11 @@ public class DeliveryRepository {
         Query<User> query = getSession().createQuery("select u from users u where u.free = :free", User.class);
         query.setParameter("free", true);
         List<User> list = query.getResultList();
-        Random rand = new Random();
-        return (DeliveryMan) list.get(rand.nextInt(list.size()));
+        if(list.size() > 0) {
+            Random rand = new Random();
+            return (DeliveryMan) list.get(rand.nextInt(list.size()));  // Next int no admite valor 0
+        }
+        return null;
     }
 
     public Product getProductById(Long id) {
@@ -116,6 +119,5 @@ public class DeliveryRepository {
         query.setParameter("number", number);
         return query.uniqueResultOptional();
     }
-
 
 }
