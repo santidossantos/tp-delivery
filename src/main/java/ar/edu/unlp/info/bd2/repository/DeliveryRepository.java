@@ -18,9 +18,9 @@ import static ar.edu.unlp.info.bd2.constants.ConstantValues.USERNAME_ERROR;
 public class DeliveryRepository {
 
     @Autowired
-    SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
-    public Session getSession() {
+    private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
 
@@ -37,11 +37,11 @@ public class DeliveryRepository {
     public void update(Object obj) throws DeliveryException {
         try {
             this.getSession().update(obj);
-            //this.getSession().getTransaction().commit(); // Tengo que forzar commit para que se guarde en la bd ;(
+            this.getSession().flush();
         } catch (ConstraintViolationException e) {
             throw new DeliveryException(CONSTRAINT_ERROR);
         } catch (Exception e) {
-            throw new DeliveryException(e.getMessage());
+            throw new DeliveryException(USERNAME_ERROR);
         }
     }
 
