@@ -168,10 +168,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     private static boolean checkAddDeliveryManToOrderConditions(DeliveryMan deliveryMan, Order order1) {
-        if(order1.getItems().size() == 0 || !deliveryMan.isFree()) {
-            return true;
-        }
-        return false;
+        return order1.getItems().size() == 0 || !deliveryMan.isFree();
     }
 
     private static void checkExistence(Object obj, String error) throws DeliveryException {
@@ -187,15 +184,16 @@ public class DeliveryServiceImpl implements DeliveryService {
         if(order1.getDeliveryMan() == null){
             return  false;
         }
+
         order1.setDelivered(true);
-        DeliveryMan deliveryMan = order1.getDeliveryMan();   // TODA ESTA LOGICA VA EN EL SERVICIO?
+
+        DeliveryMan deliveryMan = order1.getDeliveryMan();
         deliveryMan.setFree(true);
-        //deliveryMan.setScore((int) (deliveryMan.getScore() + order1.getQualification().getScore()));
-        deliveryMan.setScore(1);
+        deliveryMan.setScore(deliveryMan.getScore() + 1);
         deliveryMan.setNumberOfSuccessOrders(deliveryMan.getNumberOfSuccessOrders() + 1);
 
         Client client = order1.getClient();
-        client.setScore(client.getScore() + 1);  // PREGUNTAR
+        client.setScore(client.getScore() + 1);
 
         this.deliveryRepository.update(order1);
         this.deliveryRepository.update(deliveryMan);
@@ -203,15 +201,16 @@ public class DeliveryServiceImpl implements DeliveryService {
         return true;
     }
 
-    // SE COMIERON PASAR LAS ESTRELLAS?
     @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
         Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
-        if(order1 == null || !order1.isDelivered()){
+        checkExistence(order1, ORDER_ERROR);
+        if(!order1.isDelivered()){
             throw new DeliveryException(ORDER_ERROR);
         }
+
         Qualification qualification = new Qualification(0, commentary, order1);
-        order1.setQualification(qualification); // RARO EN EL SERVICIO?
+        order1.setQualification(qualification);
         this.deliveryRepository.save(qualification);
         return qualification;
     }
@@ -219,20 +218,20 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public Item addItemToOrder(Long order, Product product, int quantity, String description) throws DeliveryException {
         Order ord = (Order) deliveryRepository.getById(order, Order.class);
-        if (ord == null) {
-            throw new DeliveryException("No existe una orden con el id " + order);
-        }
-
-        if (ord.isDelivered()) {
-            throw new DeliveryException("La orden con id " + order + " ya fue entregada y no se pueden agregar más items.");
-        }
+        checkExistence(ord, ORDER_ERROR);
+        checkIfAnOrderIsDelivered(ord);
 
         Item item = new Item(ord, product, quantity, description);
         ord.addItem(item);
-        float totalPrice = ord.getTotalPrice() + item.getProduct().getPrice() * item.getQuantity();
-        ord.setTotalPrice(totalPrice);
+        ord.setTotalPrice(ord.getTotalPrice() + item.getProduct().getPrice() * item.getQuantity());
         this.deliveryRepository.save(item);
         return item;
+    }
+
+    private void checkIfAnOrderIsDelivered(Order order) throws DeliveryException {
+        if(order.isDelivered()){
+            throw new DeliveryException(ORDER_ERROR);
+        }
     }
 
 }
