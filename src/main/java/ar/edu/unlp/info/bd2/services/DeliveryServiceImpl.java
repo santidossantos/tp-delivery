@@ -44,7 +44,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable(deliveryRepository.getUserById(id));
+        return Optional.ofNullable( (User) deliveryRepository.getById(id, User.class));
     }
 
     @Transactional
@@ -90,7 +90,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
 
     public Optional<Order> getOrderById(Long id) {
-        return Optional.ofNullable(deliveryRepository.getOrderById(id));
+        return Optional.ofNullable( (Order) deliveryRepository.getById(id, Order.class));
     }
 
     @Transactional
@@ -130,7 +130,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Optional<Product> getProductById(Long id) {
-        return Optional.ofNullable(deliveryRepository.getProductById(id));
+        return Optional.ofNullable( (Product) deliveryRepository.getById(id, Product.class
+        ));
     }
 
     @Transactional
@@ -152,12 +153,12 @@ public class DeliveryServiceImpl implements DeliveryService {
             throw new DeliveryException(UPDATE_PRODUCT_ERROR);
         }
         product.get().setPrice(price);
-        return this.deliveryRepository.updateProductPrice(product.get());
+        return (Product) this.deliveryRepository.update(product.get());
     }
 
     @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
-        Order order1 = this.deliveryRepository.getOrderById(order);
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
         if(order1 == null){
             throw new DeliveryException(ORDER_ERROR);
         }
@@ -172,7 +173,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
-        Order order1 = this.deliveryRepository.getOrderById(order);
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
         if(order1 == null){
             throw new DeliveryException(ORDER_ERROR);
         }
@@ -198,7 +199,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     // SE COMIERON PASAR LAS ESTRELLAS?
     @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
-        Order order1 = this.deliveryRepository.getOrderById(order);
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
         if(order1 == null || !order1.isDelivered()){
             throw new DeliveryException(ORDER_ERROR);
         }
@@ -210,7 +211,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Item addItemToOrder(Long order, Product product, int quantity, String description) throws DeliveryException {
-        Order ord = deliveryRepository.getOrderById(order);
+        Order ord = (Order) deliveryRepository.getById(order, Order.class);
         if (ord == null) {
             throw new DeliveryException("No existe una orden con el id " + order);
         }

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = {AppConfig.class, HibernateConfiguration.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
 @Rollback
-public class DeliveryServiceTests {
+public class DeliveryServiceTest {
 
 	@Autowired
 	DeliveryService service;

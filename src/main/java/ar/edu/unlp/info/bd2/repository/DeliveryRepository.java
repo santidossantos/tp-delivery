@@ -27,36 +27,30 @@ public class DeliveryRepository {
     public void save(Object obj) throws DeliveryException {
         try {
             this.getSession().save(obj);
-        } catch (ConstraintViolationException e) {
-            throw new DeliveryException(CONSTRAINT_ERROR);
         } catch (Exception e) {
-            throw new DeliveryException(USERNAME_ERROR);
+            handleException(e);
         }
     }
 
-    public void update(Object obj) throws DeliveryException {
+    public Object update(Object obj) throws DeliveryException {
         try {
             this.getSession().update(obj);
-            this.getSession().flush();
-        } catch (ConstraintViolationException e) {
-            throw new DeliveryException(CONSTRAINT_ERROR);
         } catch (Exception e) {
+            handleException(e);
+        }
+        return obj;
+    }
+
+    private void handleException(Exception e) throws DeliveryException {
+        if (e instanceof ConstraintViolationException) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        } else {
             throw new DeliveryException(USERNAME_ERROR);
         }
     }
 
-    public Product updateProductPrice(Product product) throws DeliveryException {
-        this.update(product);
-        return product;
-    }
-
-    public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
-        this.update(deliveryMan1);
-        return deliveryMan1;
-    }
-
-    public User getUserById(Long id) {
-        return getSession().get(User.class, id);
+    public Object getById(Long id, Class c) {
+        return getSession().get(c, id);
     }
 
     public Optional<User> getUserByUsername(String username) {
@@ -82,9 +76,6 @@ public class DeliveryRepository {
         return null;
     }
 
-    public Product getProductById(Long id) {
-        return getSession().get(Product.class, id);
-    }
 
     public List<Product> getProductByName(String name) {
         Query<Product> query = getSession().createQuery("select p from Product p where p.name like :name", Product.class);
@@ -108,10 +99,6 @@ public class DeliveryRepository {
         Query<Supplier> query = getSession().createQuery("from Supplier s where s.cuit = :cuit", Supplier.class);
         query.setParameter("cuit", cuit);
         return query.uniqueResultOptional();
-    }
-
-    public Order getOrderById(Long id) {
-        return getSession().get(Order.class, id);
     }
 
     public Optional<Order> getOrderByNumber(int number){
