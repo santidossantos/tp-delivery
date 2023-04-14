@@ -6,6 +6,7 @@ import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -152,7 +153,10 @@ public class DeliveryServiceImpl implements DeliveryService {
         if (!product.isPresent()) {
             throw new DeliveryException(UPDATE_PRODUCT_ERROR);
         }
-        product.get().setPrice(price);
+
+        Product product1 = product.get();
+        product1.setPrice(price);
+        product1.setLastPriceUpdateDate(new Date());
         return (Product) this.deliveryRepository.update(product.get());
     }
 
