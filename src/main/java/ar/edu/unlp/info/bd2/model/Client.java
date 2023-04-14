@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @DiscriminatorValue("1")
-public class Client extends User{
+public class Client extends User {
 
     private Date dateOfRegister;
 

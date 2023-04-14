@@ -1,7 +1,6 @@
 package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
-
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -26,7 +25,6 @@ public class Qualification {
         this.score = score;
         this.commentary = commentary;
         this.order = order;
-        //this.order.setQualification(this); PREGUNTAR SI ES MEJOR ACA QUE EN EL SERVICE
     }
 
     public Long getId() {
