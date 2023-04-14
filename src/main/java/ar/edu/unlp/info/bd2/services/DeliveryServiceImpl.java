@@ -6,6 +6,7 @@ import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable(deliveryRepository.getUserById(id));
+        return Optional.ofNullable( (User) deliveryRepository.getById(id, User.class));
     }
 
     @Transactional
@@ -90,7 +91,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
 
     public Optional<Order> getOrderById(Long id) {
-        return Optional.ofNullable(deliveryRepository.getOrderById(id));
+        return Optional.ofNullable( (Order) deliveryRepository.getById(id, Order.class));
     }
 
     @Transactional
@@ -130,7 +131,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Optional<Product> getProductById(Long id) {
-        return Optional.ofNullable(deliveryRepository.getProductById(id));
+        return Optional.ofNullable( (Product) deliveryRepository.getById(id, Product.class
+        ));
     }
 
     @Transactional
@@ -151,43 +153,51 @@ public class DeliveryServiceImpl implements DeliveryService {
         if (!product.isPresent()) {
             throw new DeliveryException(UPDATE_PRODUCT_ERROR);
         }
-        product.get().setPrice(price);
-        return this.deliveryRepository.updateProductPrice(product.get());
+
+        Product product1 = product.get();
+        product1.setPrice(price);
+        product1.setLastPriceUpdateDate(new Date());
+        return (Product) this.deliveryRepository.update(product.get());
     }
 
     @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
-        Order order1 = this.deliveryRepository.getOrderById(order);
-        if(order1 == null){
-            throw new DeliveryException(ORDER_ERROR);
-        }
-        if(order1.getItems().size() == 0 || !deliveryMan.isFree()) {
-            return false;
-        }
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
+        checkExistence(order1, ORDER_ERROR);
+        if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) return false;
         order1.setDeliveryMan(deliveryMan);
         deliveryMan.setFree(false);
         this.deliveryRepository.update(order1);
         return true;
     }
 
+    private static boolean checkAddDeliveryManToOrderConditions(DeliveryMan deliveryMan, Order order1) {
+        return order1.getItems().size() == 0 || !deliveryMan.isFree();
+    }
+
+    private static void checkExistence(Object obj, String error) throws DeliveryException {
+        if(obj == null){
+            throw new DeliveryException(error);
+        }
+    }
+
     @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
-        Order order1 = this.deliveryRepository.getOrderById(order);
-        if(order1 == null){
-            throw new DeliveryException(ORDER_ERROR);
-        }
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
+        checkExistence(order1, ORDER_ERROR);
         if(order1.getDeliveryMan() == null){
             return  false;
         }
+
         order1.setDelivered(true);
-        DeliveryMan deliveryMan = order1.getDeliveryMan();   // TODA ESTA LOGICA VA EN EL SERVICIO?
+
+        DeliveryMan deliveryMan = order1.getDeliveryMan();
         deliveryMan.setFree(true);
-        //deliveryMan.setScore((int) (deliveryMan.getScore() + order1.getQualification().getScore()));
-        deliveryMan.setScore(1);
+        deliveryMan.setScore(deliveryMan.getScore() + 1);
         deliveryMan.setNumberOfSuccessOrders(deliveryMan.getNumberOfSuccessOrders() + 1);
 
         Client client = order1.getClient();
-        client.setScore(client.getScore() + 1);  // PREGUNTAR
+        client.setScore(client.getScore() + 1);
 
         this.deliveryRepository.update(order1);
         this.deliveryRepository.update(deliveryMan);
@@ -195,36 +205,37 @@ public class DeliveryServiceImpl implements DeliveryService {
         return true;
     }
 
-    // SE COMIERON PASAR LAS ESTRELLAS?
     @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
-        Order order1 = this.deliveryRepository.getOrderById(order);
-        if(order1 == null || !order1.isDelivered()){
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
+        checkExistence(order1, ORDER_ERROR);
+        if(!order1.isDelivered()){
             throw new DeliveryException(ORDER_ERROR);
         }
+
         Qualification qualification = new Qualification(0, commentary, order1);
-        order1.setQualification(qualification); // RARO EN EL SERVICIO?
+        order1.setQualification(qualification);
         this.deliveryRepository.save(qualification);
         return qualification;
     }
 
     @Transactional
     public Item addItemToOrder(Long order, Product product, int quantity, String description) throws DeliveryException {
-        Order ord = deliveryRepository.getOrderById(order);
-        if (ord == null) {
-            throw new DeliveryException("No existe una orden con el id " + order);
-        }
-
-        if (ord.isDelivered()) {
-            throw new DeliveryException("La orden con id " + order + " ya fue entregada y no se pueden agregar más items.");
-        }
+        Order ord = (Order) deliveryRepository.getById(order, Order.class);
+        checkExistence(ord, ORDER_ERROR);
+        checkIfAnOrderIsDelivered(ord);
 
         Item item = new Item(ord, product, quantity, description);
         ord.addItem(item);
-        float totalPrice = ord.getTotalPrice() + item.getProduct().getPrice() * item.getQuantity();
-        ord.setTotalPrice(totalPrice);
+        ord.setTotalPrice(ord.getTotalPrice() + item.getProduct().getPrice() * item.getQuantity());
         this.deliveryRepository.save(item);
         return item;
+    }
+
+    private void checkIfAnOrderIsDelivered(Order order) throws DeliveryException {
+        if(order.isDelivered()){
+            throw new DeliveryException(ORDER_ERROR);
+        }
     }
 
 }
