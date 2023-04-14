@@ -159,24 +159,31 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
         Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
-        if(order1 == null){
-            throw new DeliveryException(ORDER_ERROR);
-        }
-        if(order1.getItems().size() == 0 || !deliveryMan.isFree()) {
-            return false;
-        }
+        checkExistence(order1, ORDER_ERROR);
+        if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) return false;
         order1.setDeliveryMan(deliveryMan);
         deliveryMan.setFree(false);
         this.deliveryRepository.update(order1);
         return true;
     }
 
+    private static boolean checkAddDeliveryManToOrderConditions(DeliveryMan deliveryMan, Order order1) {
+        if(order1.getItems().size() == 0 || !deliveryMan.isFree()) {
+            return true;
+        }
+        return false;
+    }
+
+    private static void checkExistence(Object obj, String error) throws DeliveryException {
+        if(obj == null){
+            throw new DeliveryException(error);
+        }
+    }
+
     @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
         Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
-        if(order1 == null){
-            throw new DeliveryException(ORDER_ERROR);
-        }
+        checkExistence(order1, ORDER_ERROR);
         if(order1.getDeliveryMan() == null){
             return  false;
         }
