@@ -54,31 +54,29 @@ public class DeliveryRepository {
     }
 
     public Optional<User> getUserByUsername(String username) {
-        Query<User> query = getSession().createQuery("select u from users u where u.username = :username", User.class);
+        Query<User> query = getSession().createQuery("from User where username = :username", User.class);
         query.setParameter("username", username);
         return query.uniqueResultOptional();
     }
 
     public Optional<User> getUserByEmail(String email) {
-        Query<User> query = getSession().createQuery("select u from users u where u.email = :email", User.class);
+        Query<User> query = getSession().createQuery("from User where email = :email", User.class);
         query.setParameter("email", email);
         return query.uniqueResultOptional();
     }
 
     public DeliveryMan getFreeDeliveryMan(){
-        Query<User> query = getSession().createQuery("select u from users u where u.free = :free", User.class);
+        Query<User> query = getSession().createQuery("from User where free = :free", User.class);
         query.setParameter("free", true);
         List<User> list = query.getResultList();
         if(list.size() > 0) {
-            Random rand = new Random();
-            return (DeliveryMan) list.get(rand.nextInt(list.size()));  // Next int no admite valor 0
+            return (DeliveryMan) list.get(new Random().nextInt(list.size()));
         }
         return null;
     }
 
-
     public List<Product> getProductByName(String name) {
-        Query<Product> query = getSession().createQuery("select p from Product p where p.name like :name", Product.class);
+        Query<Product> query = getSession().createQuery("from Product where name like :name", Product.class);
         query.setParameter("name", '%' + name + '%');
         return query.getResultList();
     }
@@ -90,19 +88,19 @@ public class DeliveryRepository {
     }
 
     public List<Supplier> getSupplierByName(String name) {
-        Query<Supplier> query = getSession().createQuery("from Supplier s where s.name like :name", Supplier.class);
+        Query<Supplier> query = getSession().createQuery("from Supplier where name like :name", Supplier.class);
         query.setParameter("name", '%' + name + '%');
         return query.getResultList();
     }
 
     public Optional<Supplier> getSupplierByCUIL(String cuit) {
-        Query<Supplier> query = getSession().createQuery("from Supplier s where s.cuit = :cuit", Supplier.class);
+        Query<Supplier> query = getSession().createQuery("from Supplier where cuit = :cuit", Supplier.class);
         query.setParameter("cuit", cuit);
         return query.uniqueResultOptional();
     }
 
     public Optional<Order> getOrderByNumber(int number){
-        Query<Order> query = getSession().createQuery("FROM Order o WHERE o.number = :number", Order.class);
+        Query<Order> query = getSession().createQuery("from Order where number = :number", Order.class);
         query.setParameter("number", number);
         return query.uniqueResultOptional();
     }

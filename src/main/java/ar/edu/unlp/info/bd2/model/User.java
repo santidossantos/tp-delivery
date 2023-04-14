@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity(name="users")
+@Entity
+@Table(name="users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class User {
