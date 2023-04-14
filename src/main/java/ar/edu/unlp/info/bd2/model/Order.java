@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -144,4 +143,5 @@ public class Order {
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
     }
+
 }
