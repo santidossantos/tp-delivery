@@ -16,7 +16,7 @@ public class Qualification {
     private String commentary;
 
     @JoinColumn(name = "order_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private Order order;
 
     public Qualification() {}

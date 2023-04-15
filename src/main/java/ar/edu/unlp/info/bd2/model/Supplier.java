@@ -14,6 +14,7 @@ public class Supplier {
 
     private String name;
 
+    @Column(unique = true)
     private String cuit;
 
     private String address;

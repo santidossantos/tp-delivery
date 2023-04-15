@@ -23,7 +23,7 @@ public class Product {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 

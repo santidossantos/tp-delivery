@@ -14,6 +14,7 @@ public class Order {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private int number;
 
     private Date dateOfOrder;
@@ -28,7 +29,7 @@ public class Order {
     @JoinColumn(name = "delivery_man_id")
     private DeliveryMan deliveryMan;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "client_id")
     private Client client;
 

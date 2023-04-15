@@ -11,24 +11,16 @@ public class Item {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     private int quantity;
 
     private String description;
 
-    @ManyToOne()
+    @ManyToOne(optional = false)
     @JoinColumn(name = "order_id")
     private Order order;
 
     @JoinColumn(name = "product_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private Product product;
 
     public Item() {}
@@ -70,6 +62,14 @@ public class Item {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }
