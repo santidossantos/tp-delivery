@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.bd2.model;
 
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,10 +10,13 @@ import java.util.List;
 @DiscriminatorValue("2")
 public class DeliveryMan extends User {
 
+    @Column(name = "number_of_success_orders", nullable = false, columnDefinition = "int default '0'")
     private int numberOfSuccessOrders;
 
+    @Column(name = "date_of_admission", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateOfAdmission;
 
+    @Column(name = "free", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private boolean free;
 
     public DeliveryMan() {}

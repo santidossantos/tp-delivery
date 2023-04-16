@@ -16,11 +16,13 @@ public abstract class User {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(name = "username", unique = true)
     private String username;
 
+    @Column(name = "password", length = 50, nullable = false)
     private String password;
 
     public Long getId() {

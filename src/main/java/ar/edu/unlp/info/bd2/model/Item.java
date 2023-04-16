@@ -11,8 +11,10 @@ public class Item {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
+    @Column(name = "description", length = 150)
     private String description;
 
     @ManyToOne(optional = false)

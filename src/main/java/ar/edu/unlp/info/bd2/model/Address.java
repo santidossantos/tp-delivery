@@ -11,16 +11,22 @@ public class Address {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
+    @Column(name = "address", length = 15, nullable = false)
     private String address;
 
+    @Column(name = "apartment", length = 4)
     private String apartment;
 
+    @Column(name = "coord_x", nullable = false)
     private float coordX;
 
+    @Column(name = "coord_y", nullable = false)
     private float coordY;
 
+    @Column(name = "description", length = 150)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
