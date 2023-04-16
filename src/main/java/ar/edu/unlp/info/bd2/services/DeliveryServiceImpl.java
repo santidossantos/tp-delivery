@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import static ar.edu.unlp.info.bd2.constants.ConstantValues.*;
 
 
@@ -42,17 +41,17 @@ public class DeliveryServiceImpl implements DeliveryService {
         return deliveryMan;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
         return Optional.ofNullable( (User) deliveryRepository.getById(id, User.class));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<User> getUserByEmail(String email) {
         return deliveryRepository.getUserByEmail(email.toLowerCase());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<DeliveryMan> getAFreeDeliveryMan() {
         return Optional.ofNullable(deliveryRepository.getFreeDeliveryMan());
     }
@@ -88,7 +87,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         return AnOrder;
     }
 
-
+    @Transactional(readOnly = true)
     public Optional<Order> getOrderById(Long id) {
         return Optional.ofNullable( (Order) deliveryRepository.getById(id, Order.class));
     }
@@ -103,6 +102,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         return supplier;
     }
 
+    @Transactional(readOnly = true)
     public List<Supplier> getSupplierByName(String name) {
         return deliveryRepository.getSupplierByName(name);
     }
@@ -128,18 +128,18 @@ public class DeliveryServiceImpl implements DeliveryService {
         return product;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<Product> getProductById(Long id) {
         return Optional.ofNullable( (Product) deliveryRepository.getById(id, Product.class
         ));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Product> getProductByName(String name) {
         return deliveryRepository.getProductByName(name);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Product> getProductsByType(String type) throws DeliveryException {
         List<Product> productsByType = deliveryRepository.getProductsByType(type);
         if (productsByType == null || productsByType.isEmpty()) throw new DeliveryException(ConstantValues.PRODUCT_ERROR);
