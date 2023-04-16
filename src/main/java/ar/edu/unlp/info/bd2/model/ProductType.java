@@ -12,6 +12,7 @@ public class ProductType {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
     public ProductType() {}

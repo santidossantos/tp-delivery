@@ -9,6 +9,7 @@ import java.util.List;
 @DiscriminatorValue("1")
 public class Client extends User {
 
+    @Column(name = "date_of_register")
     private Date dateOfRegister;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)

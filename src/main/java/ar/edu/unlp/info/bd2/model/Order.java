@@ -14,21 +14,26 @@ public class Order {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(name = "number", unique = true)
     private int number;
 
+    @Column(name = "date_of_order", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateOfOrder;
 
+    @Column(name = "comments", length = 100)
     private String comments;
 
+    @Column(name = "total_price", nullable = false)
     private float totalPrice;
 
+    @Column(name = "delivered")
     private boolean delivered;
 
     @ManyToOne
     @JoinColumn(name = "delivery_man_id")
     private DeliveryMan deliveryMan;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "client_id")
     private Client client;
 

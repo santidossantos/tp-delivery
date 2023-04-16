@@ -12,14 +12,19 @@ public class Supplier {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
+    @Column(name = "cuit", length = 11, unique = true)
     private String cuit;
 
+    @Column(name = "address", length = 15, nullable = false)
     private String address;
 
+    @Column(name = "coord_x", nullable = false)
     private float coordX;
 
+    @Column(name = "coord_y", nullable = false)
     private float coordY;
 
     public Supplier() {}
