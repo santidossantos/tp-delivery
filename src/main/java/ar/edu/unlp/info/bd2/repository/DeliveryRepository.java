@@ -66,7 +66,7 @@ public class DeliveryRepository {
     }
 
     public DeliveryMan getFreeDeliveryMan(){
-        Query<User> query = getSession().createQuery("from User where free = :free", User.class);
+        Query<User> query = getSession().createQuery("from DeliveryMan where free = :free", User.class);
         query.setParameter("free", true);
         List<User> list = query.getResultList();
         if(list.size() > 0) {
