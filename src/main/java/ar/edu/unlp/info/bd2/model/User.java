@@ -19,7 +19,7 @@ public abstract class User {
     @Column(name = "name", length = 25, nullable = false)
     private String name;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "password", length = 50, nullable = false)
@@ -47,8 +47,7 @@ public abstract class User {
 
     private int score;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "client_id")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
     public User() {}

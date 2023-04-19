@@ -29,11 +29,11 @@ public class Order {
     @Column(name = "delivered")
     private boolean delivered;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "delivery_man_id")
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "client_id")
     private Client client;
 

@@ -199,8 +199,8 @@ public class DeliveryServiceImpl implements DeliveryService {
         client.setScore(client.getScore() + 1);
 
         this.deliveryRepository.update(order1);
-        this.deliveryRepository.update(deliveryMan);
-        this.deliveryRepository.update(client);
+        //this.deliveryRepository.update(deliveryMan);
+        //this.deliveryRepository.update(client);
         return true;
     }
 

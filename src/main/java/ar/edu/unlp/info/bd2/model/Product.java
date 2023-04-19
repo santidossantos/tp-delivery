@@ -32,7 +32,7 @@ public class Product {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "products_productstypes",
             joinColumns = @JoinColumn(name = "product_id"),
