@@ -1,4 +1,4 @@
-package ar.edu.unlp.info.bd2.exceptions;
+package ar.edu.unlp.info.bd2;
 
 public class DeliveryException extends Exception{
 
