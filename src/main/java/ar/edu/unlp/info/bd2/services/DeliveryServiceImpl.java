@@ -1,7 +1,7 @@
 package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.constants.ConstantValues;
-import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
+import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
 import org.springframework.stereotype.Service;
@@ -199,8 +199,8 @@ public class DeliveryServiceImpl implements DeliveryService {
         client.setScore(client.getScore() + 1);
 
         this.deliveryRepository.update(order1);
-        this.deliveryRepository.update(deliveryMan);
-        this.deliveryRepository.update(client);
+        //this.deliveryRepository.update(deliveryMan);
+        //this.deliveryRepository.update(client);
         return true;
     }
 
