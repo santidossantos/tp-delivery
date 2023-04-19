@@ -1,7 +1,7 @@
 package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.constants.ConstantValues;
-import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
+import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
 import org.springframework.stereotype.Service;

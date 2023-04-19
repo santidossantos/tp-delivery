@@ -1,6 +1,6 @@
 package ar.edu.unlp.info.bd2.repository;
 
-import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
+import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

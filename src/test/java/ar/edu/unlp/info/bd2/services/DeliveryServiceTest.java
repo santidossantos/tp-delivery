@@ -1,6 +1,6 @@
 package ar.edu.unlp.info.bd2.services;
 
-import ar.edu.unlp.info.bd2.exceptions.DeliveryException;
+import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 import ar.edu.unlp.info.bd2.model.*;
@@ -8,22 +8,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {AppConfig.class, HibernateConfiguration.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Rollback(true)
 public class DeliveryServiceTest {
 
 	@Autowired
@@ -37,7 +38,7 @@ public class DeliveryServiceTest {
 	private Date dpri;
 
 	@BeforeEach
-	public void setUp() throws SQLException {
+	public void setUp(){
 		Calendar cal1 = Calendar.getInstance();
 		cal1.set(1980, Calendar.APRIL, 5);
 		this.dob1 = cal1.getTime();
@@ -210,7 +211,7 @@ public class DeliveryServiceTest {
 		assertEquals(product1.getId(), updatedProduct.getId());
 		assertEquals(200, updatedProduct.getPrice());
 
-		assertThrows(DeliveryException.class, () -> this.service.updateProductPrice(999L, 200f), "No existe el producto a actualizar");
+		assertThrows(DeliveryException.class, () -> this.service.updateProductPrice(new Long(999), 200f), "No existe el producto a actualizar");
 	}
 
 	@Test
@@ -291,7 +292,7 @@ public class DeliveryServiceTest {
 		assertFalse(this.service.addDeliveryManToOrder(order.getId(), deliveryMan)); // La orden no tiene items.
 		Item item = this.service.addItemToOrder(order.getId(), product1, 3, "");
 		assertFalse(this.service.addDeliveryManToOrder(order.getId(), deliveryMan1)); // El DM no esta free.
-		assertThrows(DeliveryException.class, () -> this.service.addDeliveryManToOrder(50L, deliveryMan), "No existe la orden");
+		assertThrows(DeliveryException.class, () -> this.service.addDeliveryManToOrder(new Long(50), deliveryMan), "No existe la orden");
 		assertTrue(this.service.addDeliveryManToOrder(order.getId(), deliveryMan));
 		DeliveryMan updatedDeliveryMan = (DeliveryMan) this.service.getUserById(deliveryMan.getId()).orElse(null);
 		assertFalse(updatedDeliveryMan.isFree());
