@@ -23,27 +23,23 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent())
+        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent()){
             throw new DeliveryException(ConstantValues.USERNAME_ERROR);
-
-        Client client = new Client(name, username, password, email, dateOfBirth);
-        this.deliveryRepository.save(client);
-        return client;
+        }
+        return (Client) deliveryRepository.save(new Client(name, username, password, email, dateOfBirth));
     }
 
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent())
+        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent()) {
             throw new DeliveryException(ConstantValues.USERNAME_ERROR);
-
-        DeliveryMan deliveryMan = new DeliveryMan(name, username, password, email, dateOfBirth);
-        this.deliveryRepository.save(deliveryMan);
-        return deliveryMan;
+        }
+        return (DeliveryMan) deliveryRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
     }
 
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable( (User) deliveryRepository.getById(id, User.class));
+        return Optional.ofNullable((User) deliveryRepository.getById(id, User.class));
     }
 
     @Transactional(readOnly = true)
@@ -58,38 +54,31 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
-        this.deliveryRepository.update(deliveryMan1);
-        return deliveryMan1;
+        return (DeliveryMan) deliveryRepository.update(deliveryMan1);
     }
 
    @Transactional
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
-       Address anAddress = new Address(name, address, apartment, coordX, coordY, description, client);
-       this.deliveryRepository.save(anAddress);
-       return anAddress;
+       return (Address) deliveryRepository.save(new Address(name, address, apartment, coordX, coordY, description, client));
     }
 
     @Transactional
     public Address createAddress(String name, String address, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        Address anAddress = new Address(name, address, coordX, coordY, description, client);
-        this.deliveryRepository.save(anAddress);
-        return anAddress;
+        return (Address) deliveryRepository.save(new Address(name, address, coordX, coordY, description, client));
     }
 
     @Transactional
     public Order createOrder(int number, Date dateOfOrder, String comments, Client client, Address address) throws DeliveryException {
-        Optional<Order> existingOrder = this.deliveryRepository.getOrderByNumber(number);
+        Optional<Order> existingOrder = deliveryRepository.getOrderByNumber(number);
         if (existingOrder.isPresent()){
             throw new DeliveryException(CREATE_ORDER_ERROR);
         }
-        Order AnOrder = new Order(number, dateOfOrder, comments, client, address);
-        this.deliveryRepository.save(AnOrder);
-        return AnOrder;
+        return (Order) deliveryRepository.save(new Order(number, dateOfOrder, comments, client, address));
     }
 
     @Transactional(readOnly = true)
     public Optional<Order> getOrderById(Long id) {
-        return Optional.ofNullable( (Order) deliveryRepository.getById(id, Order.class));
+        return Optional.ofNullable((Order) deliveryRepository.getById(id, Order.class));
     }
 
     @Transactional
@@ -97,9 +86,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         if (deliveryRepository.getSupplierByCUIL(cuit).isPresent()){
             throw new DeliveryException(ConstantValues.USERNAME_ERROR);
         }
-        Supplier supplier = new Supplier(name, cuit, address, coordX, coordY);
-        this.deliveryRepository.save(supplier);
-        return supplier;
+        return (Supplier) deliveryRepository.save(new Supplier(name, cuit, address, coordX, coordY));
     }
 
     @Transactional(readOnly = true)
@@ -109,29 +96,22 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Transactional
     public ProductType createProductType(String name, String description) throws DeliveryException {
-        ProductType productType = new ProductType(name, description);
-        this.deliveryRepository.save(productType);
-        return productType;
+        return (ProductType) deliveryRepository.save(new ProductType(name, description));
     }
 
     @Transactional
     public Product createProduct(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        Product product = new Product(name, price, weight, description, supplier, types);
-        this.deliveryRepository.save(product);
-        return product;
+        return (Product) deliveryRepository.save(new Product(name, price, weight, description, supplier, types));
     }
 
     @Transactional
     public Product createProduct(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        Product product = new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types);
-        this.deliveryRepository.save(product);
-        return product;
+        return (Product) deliveryRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
     }
 
     @Transactional(readOnly = true)
     public Optional<Product> getProductById(Long id) {
-        return Optional.ofNullable( (Product) deliveryRepository.getById(id, Product.class
-        ));
+        return Optional.ofNullable((Product) deliveryRepository.getById(id, Product.class));
     }
 
     @Transactional(readOnly = true)
@@ -142,7 +122,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional(readOnly = true)
     public List<Product> getProductsByType(String type) throws DeliveryException {
         List<Product> productsByType = deliveryRepository.getProductsByType(type);
-        if (productsByType == null || productsByType.isEmpty()) throw new DeliveryException(ConstantValues.PRODUCT_ERROR);
+        if (productsByType.isEmpty()) throw new DeliveryException(ConstantValues.PRODUCT_ERROR);
         return productsByType;
     }
 
@@ -198,9 +178,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         Client client = order1.getClient();
         client.setScore(client.getScore() + 1);
 
-        this.deliveryRepository.update(order1);
-        //this.deliveryRepository.update(deliveryMan);
-        //this.deliveryRepository.update(client);
+        this.deliveryRepository.update(order1);  // Hace update en cascada tambien de cliente y deliveryMan por como estan definidas las relaciones
         return true;
     }
 

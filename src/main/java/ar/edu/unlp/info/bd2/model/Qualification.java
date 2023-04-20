@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -11,14 +12,14 @@ public class Qualification {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "score", nullable = false)
+    @Column(nullable = false)
     private float score; //De 1 a 5 estrellas
 
-    @Column(name = "commentary", length = 100)
+    @Column(length = 100)
     private String commentary;
 
+    @OneToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "order_id")
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private Order order;
 
     public Qualification() {}

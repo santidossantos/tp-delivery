@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -14,36 +17,35 @@ public class Order {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "number", unique = true)
+    @Column(unique = true, nullable = false)
     private int number;
 
     @Column(name = "date_of_order", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateOfOrder;
 
-    @Column(name = "comments", length = 100)
+    @Column(length = 100)
     private String comments;
 
     @Column(name = "total_price", nullable = false)
     private float totalPrice;
 
-    @Column(name = "delivered")
     private boolean delivered;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = PERSIST)
     @JoinColumn(name = "delivery_man_id")
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
+    @ManyToOne(cascade = PERSIST, optional = false)
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "order", cascade = ALL, fetch = LAZY)
     private Qualification qualification;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(cascade = ALL, fetch = LAZY)
     private Address address;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = ALL)
     private List<Item> items;
 
     public Order() {}
