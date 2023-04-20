@@ -2,6 +2,7 @@ package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
 import java.util.List;
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -12,13 +13,13 @@ public class Supplier {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 25, nullable = false)
+    @Column(length = 25, nullable = false)
     private String name;
 
-    @Column(name = "cuit", length = 11, unique = true)
+    @Column(length = 11, unique = true, nullable = false)
     private String cuit;
 
-    @Column(name = "address", length = 15, nullable = false)
+    @Column(length = 15, nullable = false)
     private String address;
 
     @Column(name = "coord_x", nullable = false)
@@ -26,6 +27,9 @@ public class Supplier {
 
     @Column(name = "coord_y", nullable = false)
     private float coordY;
+
+    @OneToMany(mappedBy = "supplier", cascade = ALL)
+    private List<Product> products;
 
     public Supplier() {}
 
@@ -36,9 +40,6 @@ public class Supplier {
         this.coordX = coordX;
         this.coordY = coordY;
     }
-
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products;
 
     public String getName() {
         return name;

@@ -24,12 +24,13 @@ public class DeliveryRepository {
         return sessionFactory.getCurrentSession();
     }
 
-    public void save(Object obj) throws DeliveryException {
+    public Object save(Object obj) throws DeliveryException {
         try {
             this.getSession().save(obj);
         } catch (Exception e) {
             handleException(e);
         }
+        return obj;
     }
 
     public Object update(Object obj) throws DeliveryException {

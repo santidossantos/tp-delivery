@@ -1,6 +1,8 @@
 package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -11,18 +13,18 @@ public class Item {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private int quantity;
 
-    @Column(name = "description", length = 150)
+    @Column(length = 150)
     private String description;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @OneToOne(fetch = EAGER, optional = false)
     @JoinColumn(name = "product_id")
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private Product product;
 
     public Item() {}

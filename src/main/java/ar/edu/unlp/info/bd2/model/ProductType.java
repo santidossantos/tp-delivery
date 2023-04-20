@@ -12,8 +12,14 @@ public class ProductType {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 25, nullable = false)
+    @Column(length = 25, nullable = false)
     private String name;
+
+    @Column(length = 150)
+    private String description;
+
+    @ManyToMany(mappedBy = "types")
+    private List<Product> products;
 
     public ProductType() {}
 
@@ -21,11 +27,6 @@ public class ProductType {
         this.name = name;
         this.description = description;
     }
-
-    private String description;
-
-    @ManyToMany(mappedBy = "types")
-    private List<Product> products;
 
     public String getName() {
         return name;

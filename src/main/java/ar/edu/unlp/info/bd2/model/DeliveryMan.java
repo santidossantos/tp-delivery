@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @DiscriminatorValue("2")
@@ -16,8 +17,11 @@ public class DeliveryMan extends User {
     @Column(name = "date_of_admission", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateOfAdmission;
 
-    @Column(name = "free", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private boolean free;
+
+    @OneToMany(cascade = ALL)
+    private List<Order> orders = new ArrayList<>();
 
     public DeliveryMan() {}
 
@@ -26,12 +30,8 @@ public class DeliveryMan extends User {
         this.numberOfSuccessOrders = 0;
         this.dateOfAdmission = new Date();
         this.free = true;
-        this.orders = new ArrayList<Order>();
+        this.orders = new ArrayList<>();
     }
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "deliveryman_id")
-    private List<Order> orders = new ArrayList<>();
 
     public List<Order> getOrders() {
         return orders;

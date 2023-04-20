@@ -3,6 +3,7 @@ package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -13,26 +14,26 @@ public class Product {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 25, nullable = false)
+    @Column(length = 25, nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
+    @Column(nullable = false)
     private float price;
 
     @Column(name = "last_price_update_date")
     private Date lastPriceUpdateDate;
 
-    @Column(name = "weight", nullable = false)
+    @Column(nullable = false)
     private float weight;
 
-    @Column(name = "description", length = 150)
+    @Column(length = 150)
     private String description;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @ManyToMany(cascade = {}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {}, fetch = LAZY)
     @JoinTable(
             name = "products_productstypes",
             joinColumns = @JoinColumn(name = "product_id"),
