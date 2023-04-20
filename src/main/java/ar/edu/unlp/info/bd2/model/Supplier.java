@@ -16,7 +16,7 @@ public class Supplier {
     @Column(length = 25, nullable = false)
     private String name;
 
-    @Column(length = 11, unique = true)
+    @Column(length = 11, unique = true, nullable = false)
     private String cuit;
 
     @Column(length = 15, nullable = false)
