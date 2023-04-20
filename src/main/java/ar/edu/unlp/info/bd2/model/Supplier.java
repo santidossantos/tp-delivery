@@ -28,6 +28,9 @@ public class Supplier {
     @Column(name = "coord_y", nullable = false)
     private float coordY;
 
+    @OneToMany(mappedBy = "supplier", cascade = ALL)
+    private List<Product> products;
+
     public Supplier() {}
 
     public Supplier(String name, String cuit, String address, float coordX, float coordY) {
@@ -37,9 +40,6 @@ public class Supplier {
         this.coordX = coordX;
         this.coordY = coordY;
     }
-
-    @OneToMany(mappedBy = "supplier", cascade = ALL)
-    private List<Product> products;
 
     public String getName() {
         return name;
