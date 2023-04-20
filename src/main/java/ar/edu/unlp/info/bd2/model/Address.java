@@ -1,7 +1,6 @@
 package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
-
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
