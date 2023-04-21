@@ -17,21 +17,22 @@ public abstract class User {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(length = 25, nullable = false)
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(length = 50, nullable = false)
+    @Column(name = "password", length = 50, nullable = false)
     private String password;
 
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
     @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
 
+    @Column(name = "score", nullable = false)
     private int score;
 
     @OneToMany(cascade = ALL)

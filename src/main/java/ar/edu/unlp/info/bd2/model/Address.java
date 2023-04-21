@@ -12,13 +12,13 @@ public class Address {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(length = 25, nullable = false)
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
-    @Column(length = 15, nullable = false)
+    @Column(name = "address", length = 15, nullable = false)
     private String address;
 
-    @Column(length = 4)
+    @Column(name = "apartment", length = 4)
     private String apartment;
 
     @Column(name = "coord_x", nullable = false)
@@ -27,7 +27,7 @@ public class Address {
     @Column(name = "coord_y", nullable = false)
     private float coordY;
 
-    @Column(length = 150)
+    @Column(name = "description", length = 150)
     private String description;
 
     @ManyToOne(fetch = LAZY, optional = false)

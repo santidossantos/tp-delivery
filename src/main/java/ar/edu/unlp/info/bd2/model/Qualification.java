@@ -12,10 +12,10 @@ public class Qualification {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "score", nullable = false)
     private float score; //De 1 a 5 estrellas
 
-    @Column(length = 100)
+    @Column(name = "commentary", length = 100)
     private String commentary;
 
     @OneToOne(fetch = LAZY, optional = false)

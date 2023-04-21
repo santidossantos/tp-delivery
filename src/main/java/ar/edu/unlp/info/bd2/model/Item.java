@@ -13,10 +13,10 @@ public class Item {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(length = 150)
+    @Column(name = "description", length = 150)
     private String description;
 
     @ManyToOne(fetch = LAZY, optional = false)

@@ -10,7 +10,7 @@ import static javax.persistence.CascadeType.ALL;
 @DiscriminatorValue("1")
 public class Client extends User {
 
-    @Column(name = "date_of_register")
+    @Column(name = "date_of_register", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateOfRegister;
 
     @OneToMany(mappedBy = "client", cascade = ALL)

@@ -12,10 +12,10 @@ public class ProductType {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(length = 25, nullable = false)
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
-    @Column(length = 150)
+    @Column(name = "description", length = 150)
     private String description;
 
     @ManyToMany(mappedBy = "types")

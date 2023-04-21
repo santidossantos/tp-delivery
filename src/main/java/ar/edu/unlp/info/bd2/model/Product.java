@@ -14,19 +14,19 @@ public class Product {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(length = 25, nullable = false)
+    @Column(name = "name", length = 25, nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     private float price;
 
     @Column(name = "last_price_update_date")
     private Date lastPriceUpdateDate;
 
-    @Column(nullable = false)
+    @Column(name = "weight", nullable = false)
     private float weight;
 
-    @Column(length = 150)
+    @Column(name = "description", length = 150)
     private String description;
 
     @ManyToOne(fetch = LAZY, optional = false)

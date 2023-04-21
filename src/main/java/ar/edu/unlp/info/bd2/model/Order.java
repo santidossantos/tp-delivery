@@ -17,18 +17,19 @@ public class Order {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "number", unique = true, nullable = false)
     private int number;
 
     @Column(name = "date_of_order", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateOfOrder;
 
-    @Column(length = 100)
+    @Column(name = "comments", length = 100)
     private String comments;
 
     @Column(name = "total_price", nullable = false)
     private float totalPrice;
 
+    @Column(name = "delivered")
     private boolean delivered;
 
     @ManyToOne(cascade = PERSIST)
