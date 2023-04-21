@@ -17,7 +17,7 @@ public class DeliveryMan extends User {
     @Column(name = "date_of_admission", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateOfAdmission;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private boolean free;
 
     @OneToMany(cascade = ALL)
