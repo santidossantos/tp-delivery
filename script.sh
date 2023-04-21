@@ -3,7 +3,7 @@
 dbname='bd2_2023_grupo6'
 user='usuario'
 
-echo "Ingresa tu contraseña de usuario root de MySQL: ";
+echo "Ingrese tu contraseña de usuario root de MySQL: ";
 echo "Creando base de datos: '${dbname}'"
 mysql -u root -p  -e "CREATE DATABASE IF NOT EXISTS ${dbname};"
 mysql -u root -e "CREATE USER IF NOT EXISTS '${user}'@'localhost' IDENTIFIED BY 'password';"
