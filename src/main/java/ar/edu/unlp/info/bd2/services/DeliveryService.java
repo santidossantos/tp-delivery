@@ -222,4 +222,20 @@ public interface DeliveryService {
 	 */
 	public Item addItemToOrder( Long order, Product product,  int quantity, String description ) throws DeliveryException;
 
+	/**
+	 * Actualiza los datos de un usuario
+	 * @param user el usuario a actualizar
+	 * @return el usuario actualizado
+	 * @throws DeliveryException
+	 */
+	public User updateUser(User user) throws DeliveryException;
+
+	/**
+	 * Actualiza los datos de una calificación
+	 * @param qualification la calificacion a actualizar
+	 * @return la calificacion actualizada
+	 * @throws DeliveryException
+	 */
+	public Qualification updateQualification(Qualification qualification) throws DeliveryException;
+
 }
