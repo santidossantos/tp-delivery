@@ -134,7 +134,7 @@ public class DeliveryRepository {
     }
 
     public Long getNumberOfOrderNoDelivered() {
-        return simpleQueryFactory("select count(o.id) from Order o where o.delivered = false", Order.class).stream().count();
+        return simpleQueryFactory("select count(id) from Order where delivered = false", Order.class).stream().count();
     }
 
 }
