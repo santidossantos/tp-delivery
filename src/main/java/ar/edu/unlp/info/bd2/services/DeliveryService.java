@@ -2,11 +2,13 @@ package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public interface DeliveryService {
 
 	/**
@@ -32,7 +34,7 @@ public interface DeliveryService {
 	public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException;
 
 	/**
-	 * Obtiene el usuario (de cualquier tipo) por id
+	 * Obtiene el usuario (de cualqueir tipo) por id
 	 * @param id
 	 * @return el usuario con el id provisto
 	 */
@@ -219,5 +221,21 @@ public interface DeliveryService {
 	 * @throws DeliveryException en caso de no existir el pedido
 	 */
 	public Item addItemToOrder( Long order, Product product,  int quantity, String description ) throws DeliveryException;
+
+	/**
+	 * Actualiza los datos de un usuario
+	 * @param user el usuario a actualizar
+	 * @return el usuario actualizado
+	 * @throws DeliveryException
+	 */
+	public User updateUser(User user) throws DeliveryException;
+
+	/**
+	 * Actualiza los datos de una calificación
+	 * @param qualification la calificacion a actualizar
+	 * @return la calificacion actualizada
+	 * @throws DeliveryException
+	 */
+	public Qualification updateQualification(Qualification qualification) throws DeliveryException;
 
 }

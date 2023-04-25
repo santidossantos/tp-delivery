@@ -13,7 +13,7 @@ import static ar.edu.unlp.info.bd2.constants.ConstantValues.*;
 
 
 @Service
-public class DeliveryServiceImpl implements DeliveryService {
+public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsService {
 
     DeliveryRepository deliveryRepository;
 
@@ -213,6 +213,95 @@ public class DeliveryServiceImpl implements DeliveryService {
         if(order.isDelivered()){
             throw new DeliveryException(ORDER_ERROR);
         }
+    }
+
+    /*
+            PARTE 2
+     */
+
+    @Override
+    public User updateUser(User user) throws DeliveryException {
+        return null;
+    }
+
+    @Override
+    public Qualification updateQualification(Qualification qualification) throws DeliveryException {
+        return null;
+    }
+
+    @Override
+    public List<User> getTopNUserWithMoreScore(int n) {
+        return null;
+    }
+
+    @Override
+    public List<DeliveryMan> getTop10DeliveryManWithMoreOrders() {
+        return null;
+    }
+
+    @Override
+    public List<Client> getUsersSpentMoreThan(float number) {
+        return null;
+    }
+
+    @Override
+    public List<Order> getAllOrdersFromUser(String username) {
+        return null;
+    }
+
+    @Override
+    public Long getNumberOfOrderNoDelivered() {
+        return null;
+    }
+
+    @Override
+    public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
+        return null;
+    }
+
+    @Override
+    public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Supplier> getSuppliersWithoutProducts() {
+        return null;
+    }
+
+    @Override
+    public List<Product> getProductsWithPriceDateOlderThan(int days) {
+        return null;
+    }
+
+    @Override
+    public List<Product> getTop5MoreExpansiveProducts() {
+        return null;
+    }
+
+    @Override
+    public Product getMostDemandedProduct() {
+        return null;
+    }
+
+    @Override
+    public List<Product> getProductsNoAddedToOrders() {
+        return null;
+    }
+
+    @Override
+    public List<ProductType> getTop3ProductTypesWithLessProducts() {
+        return null;
+    }
+
+    @Override
+    public Supplier getSupplierWithMoreProducts() {
+        return null;
+    }
+
+    @Override
+    public List<Supplier> getSupplierWith1StarCalifications() {
+        return null;
     }
 
 }
