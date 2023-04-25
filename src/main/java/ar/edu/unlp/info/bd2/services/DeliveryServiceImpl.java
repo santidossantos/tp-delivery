@@ -231,27 +231,27 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Override
     public List<User> getTopNUserWithMoreScore(int n) {
-        return null;
+        return deliveryRepository.getTopNUserWithMoreScore(n);
     }
 
     @Override
     public List<DeliveryMan> getTop10DeliveryManWithMoreOrders() {
-        return null;
+        return deliveryRepository.getTop10DeliveryManWithMoreOrders(10);
     }
 
     @Override
     public List<Client> getUsersSpentMoreThan(float number) {
-        return null;
+        return deliveryRepository.getUsersSpentMoreThan(number);
     }
 
     @Override
     public List<Order> getAllOrdersFromUser(String username) {
-        return null;
+        return deliveryRepository.getAllOrdersFromUser(username);
     }
 
     @Override
     public Long getNumberOfOrderNoDelivered() {
-        return null;
+        return deliveryRepository.getNumberOfOrderNoDelivered();
     }
 
     @Override

@@ -106,4 +106,35 @@ public class DeliveryRepository {
         return query.uniqueResultOptional();
     }
 
+    /*                          *
+     *          PARTE 2         *
+     *                          */
+
+    private <T> Query<T> simpleQueryFactory(String hql, Class<T> type) {
+        return getSession().createQuery(hql, type);
+    }
+
+    public List<User> getTopNUserWithMoreScore(int n) {
+        return simpleQueryFactory("from User order by score desc", User.class).setMaxResults(n).getResultList();
+    }
+
+    public List<DeliveryMan> getTop10DeliveryManWithMoreOrders(int n) {
+        return simpleQueryFactory("from DeliveryMan order by number_of_success_orders", DeliveryMan.class)
+                .setMaxResults(n).getResultList();
+    }
+    
+    public List<Client> getUsersSpentMoreThan(float number) {
+        return  simpleQueryFactory("from Client c join c.orders o where o.total_price >= :number", Client.class)
+                .setParameter("number", number).getResultList();
+    }
+
+    public List<Order> getAllOrdersFromUser(String username) {
+        return  simpleQueryFactory("from Order o join o.client c where c.username = :username", Order.class)
+                .setParameter("username", username).getResultList();
+    }
+
+    public Long getNumberOfOrderNoDelivered() {
+        return simpleQueryFactory("select count(o.id) from Order o where o.delivered = false", Order.class).stream().count();
+    }
+
 }
