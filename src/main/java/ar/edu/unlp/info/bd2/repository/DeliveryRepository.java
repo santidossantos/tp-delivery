@@ -50,68 +50,54 @@ public class DeliveryRepository {
         }
     }
 
+    private <T> Query<T> simpleQueryFactory(String hql, Class<T> type) {
+        return getSession().createQuery(hql, type);
+    }
+
     public Object getById(Long id, Class c) {
         return getSession().get(c, id);
     }
 
     public Optional<User> getUserByUsername(String username) {
-        Query<User> query = getSession().createQuery("from User where username = :username", User.class);
-        query.setParameter("username", username);
-        return query.uniqueResultOptional();
+        return simpleQueryFactory("from User where username = :username", User.class)
+                .setParameter("username", username).uniqueResultOptional();
     }
 
     public Optional<User> getUserByEmail(String email) {
-        Query<User> query = getSession().createQuery("from User where email = :email", User.class);
-        query.setParameter("email", email);
-        return query.uniqueResultOptional();
+        return  simpleQueryFactory("from User where email = :email", User.class)
+                .setParameter("email", email).uniqueResultOptional();
     }
 
     public DeliveryMan getFreeDeliveryMan(){
-        Query<User> query = getSession().createQuery("from DeliveryMan where free = :free", User.class);
-        query.setParameter("free", true);
-        List<User> list = query.getResultList();
-        if(list.size() > 0) {
-            return (DeliveryMan) list.get(new Random().nextInt(list.size()));
-        }
-        return null;
+        List<User> list  = simpleQueryFactory("from DeliveryMan where free = :free", User.class)
+                .setParameter("free", true).getResultList();
+
+        return (list.size() > 0) ? ((DeliveryMan) list.get(new Random().nextInt(list.size()))) : null;
     }
 
     public List<Product> getProductByName(String name) {
-        Query<Product> query = getSession().createQuery("from Product where name like :name", Product.class);
-        query.setParameter("name", '%' + name + '%');
-        return query.getResultList();
+        return  simpleQueryFactory("from Product where name like :name", Product.class)
+                .setParameter("name", '%' + name + '%').getResultList();
     }
 
     public List<Product> getProductsByType(String type) {
-        Query<Product> query = getSession().createQuery("select p from Product p join p.types t where t.name like :type", Product.class);
-        query.setParameter("type", '%' + type + '%');
-        return query.getResultList();
+        return  simpleQueryFactory("select p from Product p join p.types t where t.name like :type", Product.class)
+                .setParameter("type", '%' + type + '%').getResultList();
     }
 
     public List<Supplier> getSupplierByName(String name) {
-        Query<Supplier> query = getSession().createQuery("from Supplier where name like :name", Supplier.class);
-        query.setParameter("name", '%' + name + '%');
-        return query.getResultList();
+        return  simpleQueryFactory("from Supplier where name like :name", Supplier.class)
+                .setParameter("name", '%' + name + '%').getResultList();
     }
 
     public Optional<Supplier> getSupplierByCUIL(String cuit) {
-        Query<Supplier> query = getSession().createQuery("from Supplier where cuit = :cuit", Supplier.class);
-        query.setParameter("cuit", cuit);
-        return query.uniqueResultOptional();
+        return simpleQueryFactory("from Supplier where cuit = :cuit", Supplier.class)
+                .setParameter("cuit", cuit).uniqueResultOptional();
     }
 
     public Optional<Order> getOrderByNumber(int number){
-        Query<Order> query = getSession().createQuery("from Order where number = :number", Order.class);
-        query.setParameter("number", number);
-        return query.uniqueResultOptional();
-    }
-
-    /*                          *
-     *          PARTE 2         *
-     *                          */
-
-    private <T> Query<T> simpleQueryFactory(String hql, Class<T> type) {
-        return getSession().createQuery(hql, type);
+        return simpleQueryFactory("from Order where number = :number", Order.class)
+                .setParameter("number", number).uniqueResultOptional();
     }
 
     public List<User> getTopNUserWithMoreScore(int n) {
@@ -134,7 +120,7 @@ public class DeliveryRepository {
     }
 
     public Long getNumberOfOrdersNoDelivered() {
-        return simpleQueryFactory("select count(id) from Order where delivered = false", Order.class).stream().count();
+        return (Long) getSession().createQuery("select count(o) from Order o where delivered = false").uniqueResult();
     }
 
 }
