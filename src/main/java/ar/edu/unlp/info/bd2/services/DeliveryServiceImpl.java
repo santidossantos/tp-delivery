@@ -1,6 +1,5 @@
 package ar.edu.unlp.info.bd2.services;
 
-import ar.edu.unlp.info.bd2.constants.ConstantValues;
 import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repository.DeliveryRepository;
@@ -24,7 +23,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
         if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent()){
-            throw new DeliveryException(ConstantValues.USERNAME_ERROR);
+            throw new DeliveryException(USERNAME_ERROR);
         }
         return (Client) deliveryRepository.save(new Client(name, username, password, email, dateOfBirth));
     }
@@ -32,14 +31,14 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
         if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent()) {
-            throw new DeliveryException(ConstantValues.USERNAME_ERROR);
+            throw new DeliveryException(USERNAME_ERROR);
         }
         return (DeliveryMan) deliveryRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
     }
 
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable((User) deliveryRepository.getById(id, User.class));
+        return deliveryRepository.getById(id, User.class).map(user -> (User) user);
     }
 
     @Transactional(readOnly = true)
@@ -78,13 +77,13 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional(readOnly = true)
     public Optional<Order> getOrderById(Long id) {
-        return Optional.ofNullable((Order) deliveryRepository.getById(id, Order.class));
+        return deliveryRepository.getById(id, Order.class).map(order -> (Order) order);
     }
 
     @Transactional
     public Supplier createSupplier(String name, String cuit, String address, float coordX, float coordY) throws DeliveryException {
         if (deliveryRepository.getSupplierByCUIL(cuit).isPresent()){
-            throw new DeliveryException(ConstantValues.USERNAME_ERROR);
+            throw new DeliveryException(USERNAME_ERROR);
         }
         return (Supplier) deliveryRepository.save(new Supplier(name, cuit, address, coordX, coordY));
     }
@@ -111,7 +110,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional(readOnly = true)
     public Optional<Product> getProductById(Long id) {
-        return Optional.ofNullable((Product) deliveryRepository.getById(id, Product.class));
+        return  deliveryRepository.getById(id, Product.class).map(product -> (Product) product);
     }
 
     @Transactional(readOnly = true)
@@ -122,30 +121,26 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional(readOnly = true)
     public List<Product> getProductsByType(String type) throws DeliveryException {
         List<Product> productsByType = deliveryRepository.getProductsByType(type);
-        if (productsByType.isEmpty()) throw new DeliveryException(ConstantValues.PRODUCT_ERROR);
+        if (productsByType.isEmpty()) {
+            throw new DeliveryException(PRODUCT_ERROR);
+        }
         return productsByType;
     }
 
     @Transactional
     public Product updateProductPrice(Long id, float price) throws DeliveryException {
-        Optional<Product> product = this.getProductById(id);
-        if (!product.isPresent()) {
-            throw new DeliveryException(UPDATE_PRODUCT_ERROR);
-        }
-
-        Product product1 = product.get();
-        product1.setPrice(price);
-        product1.setLastPriceUpdateDate(new Date());
-        return (Product) this.deliveryRepository.update(product.get());
+        Product product = this.getProductById(id).orElseThrow(() -> new DeliveryException(UPDATE_PRODUCT_ERROR));
+        product.updateProductPrice(price);
+        return (Product) this.deliveryRepository.update(product);
     }
 
     @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
-        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
-        checkExistence(order1, ORDER_ERROR);
-        if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) return false;
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) {
+            return false;
+        }
         order1.setDeliveryMan(deliveryMan);
-        deliveryMan.setFree(false);
         this.deliveryRepository.update(order1);
         return true;
     }
@@ -154,43 +149,24 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
         return order1.getItems().size() == 0 || !deliveryMan.isFree();
     }
 
-    private static void checkExistence(Object obj, String error) throws DeliveryException {
-        if(obj == null){
-            throw new DeliveryException(error);
-        }
-    }
-
     @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
-        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
-        checkExistence(order1, ORDER_ERROR);
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
         if(order1.getDeliveryMan() == null){
             return  false;
         }
-
         order1.setDelivered(true);
-
-        DeliveryMan deliveryMan = order1.getDeliveryMan();
-        deliveryMan.setFree(true);
-        deliveryMan.setScore(deliveryMan.getScore() + 1);
-        deliveryMan.setNumberOfSuccessOrders(deliveryMan.getNumberOfSuccessOrders() + 1);
-
-        Client client = order1.getClient();
-        client.setScore(client.getScore() + 1);
-
         this.deliveryRepository.update(order1);  // Hace update en cascada tambien de cliente y deliveryMan por como estan definidas las relaciones
         return true;
     }
 
     @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
-        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class);
-        checkExistence(order1, ORDER_ERROR);
+        Order order1 = (Order) this.deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
         if(!order1.isDelivered()){
             throw new DeliveryException(ORDER_ERROR);
         }
-
-        Qualification qualification = new Qualification(0, commentary, order1);
+        Qualification qualification = new Qualification(commentary, order1);
         order1.setQualification(qualification);
         this.deliveryRepository.save(qualification);
         return qualification;
@@ -198,26 +174,15 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional
     public Item addItemToOrder(Long order, Product product, int quantity, String description) throws DeliveryException {
-        Order ord = (Order) deliveryRepository.getById(order, Order.class);
-        checkExistence(ord, ORDER_ERROR);
-        checkIfAnOrderIsDelivered(ord);
-
+        Order ord = (Order) deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        if(ord.isDelivered()){
+            throw new DeliveryException(ORDER_ERROR);
+        }
         Item item = new Item(ord, product, quantity, description);
         ord.addItem(item);
-        ord.setTotalPrice(ord.getTotalPrice() + item.getProduct().getPrice() * item.getQuantity());
         this.deliveryRepository.save(item);
         return item;
     }
-
-    private void checkIfAnOrderIsDelivered(Order order) throws DeliveryException {
-        if(order.isDelivered()){
-            throw new DeliveryException(ORDER_ERROR);
-        }
-    }
-
-    /*
-            PARTE 2
-     */
 
     @Override
     public User updateUser(User user) throws DeliveryException {

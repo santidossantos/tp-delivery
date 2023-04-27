@@ -62,6 +62,7 @@ public class Order {
 
     public void addItem(Item item) {
         items.add(item);
+        setTotalPrice(getTotalPrice() + item.calculatePrice());
     }
 
     public int getNumber() {
@@ -110,6 +111,7 @@ public class Order {
 
     public void setDeliveryMan(DeliveryMan deliveryMan) {
         this.deliveryMan = deliveryMan;
+        deliveryMan.setFree(false);
     }
 
     public Client getClient() {
@@ -150,6 +152,8 @@ public class Order {
 
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
+        this.deliveryMan.completeOrder();
+        this.client.updateScore();
     }
 
 }

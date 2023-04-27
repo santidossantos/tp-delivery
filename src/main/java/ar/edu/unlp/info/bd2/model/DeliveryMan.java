@@ -65,4 +65,10 @@ public class DeliveryMan extends User {
         this.free = free;
     }
 
+    public void completeOrder() {
+        this.free = true;
+        this.numberOfSuccessOrders++;
+        this.setScore(this.getScore() + 1);
+    }
+
 }

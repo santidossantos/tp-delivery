@@ -123,4 +123,9 @@ public class Product {
         this.id = id;
     }
 
+    public void updateProductPrice(float price) {
+        this.price = price;
+        this.lastPriceUpdateDate = new Date();
+    }
+
 }

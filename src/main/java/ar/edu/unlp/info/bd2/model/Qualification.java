@@ -1,6 +1,9 @@
 package ar.edu.unlp.info.bd2.model;
 
 import javax.persistence.*;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,10 +27,14 @@ public class Qualification {
 
     public Qualification() {}
 
-    public Qualification(float score, String commentary, Order order) {
-        this.score = score;
+    public Qualification(String commentary, Order order) {
         this.commentary = commentary;
         this.order = order;
+    }
+
+    public Qualification(float score, String commentary, Order order) {
+        this(commentary, order);
+        this.score = score;
     }
 
     public Long getId() {

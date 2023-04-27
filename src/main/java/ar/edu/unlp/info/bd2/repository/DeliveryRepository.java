@@ -54,8 +54,8 @@ public class DeliveryRepository {
         return getSession().createQuery(hql, type);
     }
 
-    public Object getById(Long id, Class c) {
-        return getSession().get(c, id);
+    public Optional<Object> getById(Long id, Class c) {
+        return Optional.ofNullable(getSession().get(c, id));
     }
 
     public Optional<User> getUserByUsername(String username) {

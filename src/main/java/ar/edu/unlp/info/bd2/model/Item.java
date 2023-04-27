@@ -76,4 +76,8 @@ public class Item {
         this.id = id;
     }
 
+    public float calculatePrice() {
+        return this.product.getPrice() * this.quantity;
+    }
+
 }

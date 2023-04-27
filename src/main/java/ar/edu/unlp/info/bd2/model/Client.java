@@ -43,4 +43,8 @@ public class Client extends User {
         this.addresses.add(address);
     }
 
+    public void updateScore() {
+        this.setScore(this.getScore() + 1);
+    }
+
 }
