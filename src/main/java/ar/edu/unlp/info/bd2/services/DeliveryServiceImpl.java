@@ -236,7 +236,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Override
     public List<DeliveryMan> getTop10DeliveryManWithMoreOrders() {
-        return deliveryRepository.getTop10DeliveryManWithMoreOrders(10);
+        return deliveryRepository.getTopNDeliveryManWithMoreOrders(10);
     }
 
     @Override
@@ -251,7 +251,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Override
     public Long getNumberOfOrderNoDelivered() {
-        return deliveryRepository.getNumberOfOrderNoDelivered();
+        return deliveryRepository.getNumberOfOrdersNoDelivered();
     }
 
     @Override

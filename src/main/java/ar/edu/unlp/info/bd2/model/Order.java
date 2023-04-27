@@ -46,7 +46,7 @@ public class Order {
     @OneToOne(cascade = ALL, fetch = LAZY)
     private Address address;
 
-    @OneToMany(mappedBy = "order", cascade = ALL)
+    @OneToMany(mappedBy = "order", cascade = ALL, fetch = LAZY)
     private List<Item> items;
 
     public Order() {}
