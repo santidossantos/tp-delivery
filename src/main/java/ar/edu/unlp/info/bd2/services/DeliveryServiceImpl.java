@@ -108,9 +108,8 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional(readOnly = true)
     public List<Product> getProductsByType(String type) throws DeliveryException {
         List<Product> productsByType = deliveryRepository.getProductsByType(type);
-        if (productsByType.isEmpty()) {
+        if (productsByType.isEmpty())
             throw new DeliveryException(PRODUCT_ERROR);
-        }
         return productsByType;
     }
 
@@ -124,9 +123,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
         Order order1 = (Order) this.deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
-        if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) {
-            return false;
-        }
+        if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) return false;
         order1.setDeliveryMan(deliveryMan);
         this.deliveryRepository.update(order1);
         return true;
@@ -139,9 +136,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
         Order order1 = (Order) this.deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
-        if(order1.getDeliveryMan() == null){
-            return  false;
-        }
+        if(!order1.hasAsignedDeliveryMan()) return false;
         order1.setDelivered(true);
         this.deliveryRepository.update(order1);  // Hace update en cascada tambien de cliente y deliveryMan por como estan definidas las relaciones
         return true;
@@ -150,9 +145,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
         Order order1 = (Order) this.deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
-        if(!order1.isDelivered()){
-            throw new DeliveryException(ORDER_ERROR);
-        }
+        if(!order1.isDelivered()) throw new DeliveryException(ORDER_ERROR);
         Qualification qualification = new Qualification(commentary, order1);
         order1.setQualification(qualification);
         this.deliveryRepository.save(qualification);
@@ -162,9 +155,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional
     public Item addItemToOrder(Long order, Product product, int quantity, String description) throws DeliveryException {
         Order ord = (Order) deliveryRepository.getById(order, Order.class).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
-        if(ord.isDelivered()){
-            throw new DeliveryException(ORDER_ERROR);
-        }
+        if(ord.isDelivered()) throw new DeliveryException(ORDER_ERROR);
         Item item = new Item(ord, product, quantity, description);
         ord.addItem(item);
         this.deliveryRepository.save(item);

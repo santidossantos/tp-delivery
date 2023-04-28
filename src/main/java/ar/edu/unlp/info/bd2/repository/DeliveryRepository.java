@@ -71,7 +71,6 @@ public class DeliveryRepository {
     public DeliveryMan getFreeDeliveryMan(){
         List<User> list  = simpleQueryFactory("from DeliveryMan where free = :free", User.class)
                 .setParameter("free", true).getResultList();
-
         return (list.size() > 0) ? ((DeliveryMan) list.get(new Random().nextInt(list.size()))) : null;
     }
 

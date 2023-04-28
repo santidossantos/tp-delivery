@@ -156,4 +156,8 @@ public class Order {
         this.client.updateScore();
     }
 
+    public boolean hasAsignedDeliveryMan() {
+        return (this.deliveryMan != null);
+    }
+
 }
