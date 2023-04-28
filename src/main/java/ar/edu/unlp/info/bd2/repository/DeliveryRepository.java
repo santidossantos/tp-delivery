@@ -108,11 +108,6 @@ public class DeliveryRepository {
         return simpleQueryFactory("from DeliveryMan order by numberOfSuccessOrders desc", DeliveryMan.class)
                 .setMaxResults(n).getResultList();
     }
-    
-    /*public List<Client> getUsersSpentMoreThan(float number) {
-        return  simpleQueryFactory("select distinct c from Client c join c.orders o where o.totalPrice >= :number", Client.class)
-                .setParameter("number", number).getResultList();
-    }*/
 
     public List<Client> getUsersSpentMoreThan(float number) {
         return  simpleQueryFactory("select distinct c from Order o join o.client c where o.totalPrice >= :number", Client.class)

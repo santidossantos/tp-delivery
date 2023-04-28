@@ -22,17 +22,11 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent()){
-            throw new DeliveryException(USERNAME_ERROR);
-        }
         return (Client) deliveryRepository.save(new Client(name, username, password, email, dateOfBirth));
     }
 
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        if (deliveryRepository.getUserByUsername(username.toLowerCase()).isPresent()) {
-            throw new DeliveryException(USERNAME_ERROR);
-        }
         return (DeliveryMan) deliveryRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
     }
 
@@ -68,10 +62,6 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional
     public Order createOrder(int number, Date dateOfOrder, String comments, Client client, Address address) throws DeliveryException {
-        Optional<Order> existingOrder = deliveryRepository.getOrderByNumber(number);
-        if (existingOrder.isPresent()){
-            throw new DeliveryException(CREATE_ORDER_ERROR);
-        }
         return (Order) deliveryRepository.save(new Order(number, dateOfOrder, comments, client, address));
     }
 
@@ -82,9 +72,6 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional
     public Supplier createSupplier(String name, String cuit, String address, float coordX, float coordY) throws DeliveryException {
-        if (deliveryRepository.getSupplierByCUIL(cuit).isPresent()){
-            throw new DeliveryException(USERNAME_ERROR);
-        }
         return (Supplier) deliveryRepository.save(new Supplier(name, cuit, address, coordX, coordY));
     }
 
