@@ -108,8 +108,7 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
     @Transactional(readOnly = true)
     public List<Product> getProductsByType(String type) throws DeliveryException {
         List<Product> productsByType = deliveryRepository.getProductsByType(type);
-        if (productsByType.isEmpty())
-            throw new DeliveryException(PRODUCT_ERROR);
+        if (productsByType.isEmpty()) throw new DeliveryException(PRODUCT_ERROR);
         return productsByType;
     }
 
@@ -162,87 +161,87 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
         return item;
     }
 
-    @Override
+    @Transactional
     public User updateUser(User user) throws DeliveryException {
         return (User) deliveryRepository.update(user);
     }
 
-    @Override
+    @Transactional
     public Qualification updateQualification(Qualification qualification) throws DeliveryException {
         return (Qualification) deliveryRepository.update(qualification);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<User> getTopNUserWithMoreScore(int n) {
         return deliveryRepository.getTopNUserWithMoreScore(n);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<DeliveryMan> getTop10DeliveryManWithMoreOrders() {
         return deliveryRepository.getTopNDeliveryManWithMoreOrders(10);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Client> getUsersSpentMoreThan(float number) {
         return deliveryRepository.getUsersSpentMoreThan(number);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Order> getAllOrdersFromUser(String username) {
         return deliveryRepository.getAllOrdersFromUser(username);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Long getNumberOfOrderNoDelivered() {
         return deliveryRepository.getNumberOfOrdersNoDelivered();
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
         return Optional.empty();
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Supplier> getSuppliersWithoutProducts() {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsWithPriceDateOlderThan(int days) {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Product> getTop5MoreExpansiveProducts() {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Product getMostDemandedProduct() {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsNoAddedToOrders() {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<ProductType> getTop3ProductTypesWithLessProducts() {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Supplier getSupplierWithMoreProducts() {
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Supplier> getSupplierWith1StarCalifications() {
         return null;
     }
