@@ -23,7 +23,7 @@ public class Item {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToOne(fetch = EAGER, optional = false)
+    @OneToOne(fetch = EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
 

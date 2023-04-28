@@ -13,13 +13,13 @@ public class Supplier {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 25, nullable = false)
+    @Column(name = "name", length = 35, nullable = false)
     private String name;
 
     @Column(name = "cuit", length = 11, unique = true, nullable = false)
     private String cuit;
 
-    @Column(name = "address", length = 15, nullable = false)
+    @Column(name = "address", length = 45, nullable = false)
     private String address;
 
     @Column(name = "coord_x", nullable = false)
