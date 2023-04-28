@@ -105,17 +105,22 @@ public class DeliveryRepository {
     }
 
     public List<DeliveryMan> getTopNDeliveryManWithMoreOrders(int n) {
-        return simpleQueryFactory("from DeliveryMan order by numberOfSuccessOrders", DeliveryMan.class)
+        return simpleQueryFactory("from DeliveryMan order by numberOfSuccessOrders desc", DeliveryMan.class)
                 .setMaxResults(n).getResultList();
     }
     
+    /*public List<Client> getUsersSpentMoreThan(float number) {
+        return  simpleQueryFactory("select distinct c from Client c join c.orders o where o.totalPrice >= :number", Client.class)
+                .setParameter("number", number).getResultList();
+    }*/
+
     public List<Client> getUsersSpentMoreThan(float number) {
-        return  simpleQueryFactory("select distinct from Client c join c.orders o where o.totalPrice >= :number", Client.class)
+        return  simpleQueryFactory("select distinct c from Order o join o.client c where o.totalPrice >= :number", Client.class)
                 .setParameter("number", number).getResultList();
     }
 
     public List<Order> getAllOrdersFromUser(String username) {
-        return  simpleQueryFactory("from Order o join o.client c where c.username = :username", Order.class)
+        return  simpleQueryFactory("select o from Order o join o.client c where c.username = :username", Order.class)
                 .setParameter("username", username).getResultList();
     }
 

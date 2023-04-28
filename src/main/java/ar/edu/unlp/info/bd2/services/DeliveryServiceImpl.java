@@ -186,12 +186,12 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Override
     public User updateUser(User user) throws DeliveryException {
-        return null;
+        return (User) deliveryRepository.update(user);
     }
 
     @Override
     public Qualification updateQualification(Qualification qualification) throws DeliveryException {
-        return null;
+        return (Qualification) deliveryRepository.update(qualification);
     }
 
     @Override
