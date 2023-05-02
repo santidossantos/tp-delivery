@@ -58,6 +58,11 @@ public class Product {
         this.lastPriceUpdateDate = lastPriceUpdateDate;
     }
 
+    public void updateProductPrice(float price) {
+        this.price = price;
+        this.lastPriceUpdateDate = new Date();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -121,11 +126,6 @@ public class Product {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void updateProductPrice(float price) {
-        this.price = price;
-        this.lastPriceUpdateDate = new Date();
     }
 
 }

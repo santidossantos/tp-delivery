@@ -23,6 +23,10 @@ public class Client extends User {
         this.dateOfRegister = new Date();
     }
 
+    public void updateScore() {
+        this.setScore(this.getScore() + 1);
+    }
+
     public Date getDateOfRegister() {
         return dateOfRegister;
     }
@@ -41,10 +45,6 @@ public class Client extends User {
 
     public void addAddress(Address address) {
         this.addresses.add(address);
-    }
-
-    public void updateScore() {
-        this.setScore(this.getScore() + 1);
     }
 
 }

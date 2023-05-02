@@ -23,7 +23,7 @@ public class Item {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToOne(fetch = EAGER)
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -34,6 +34,10 @@ public class Item {
         this.product = product;
         this.quantity = quantity;
         this.description = description;
+    }
+
+    public float calculatePrice() {
+        return this.product.getPrice() * this.quantity;
     }
 
     public int getQuantity() {
@@ -74,10 +78,6 @@ public class Item {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public float calculatePrice() {
-        return this.product.getPrice() * this.quantity;
     }
 
 }

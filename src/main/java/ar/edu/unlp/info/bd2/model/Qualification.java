@@ -16,7 +16,7 @@ public class Qualification {
     private Long id;
 
     @Column(name = "score", nullable = false)
-    private float score; //De 1 a 5 estrellas
+    private float score; // De 1 a 5 estrellas
 
     @Column(name = "commentary", length = 100)
     private String commentary;

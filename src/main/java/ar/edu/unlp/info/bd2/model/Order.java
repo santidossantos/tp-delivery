@@ -65,6 +65,16 @@ public class Order {
         setTotalPrice(getTotalPrice() + item.calculatePrice());
     }
 
+    public void setDelivered(boolean delivered) {
+        this.delivered = delivered;
+        this.deliveryMan.finishCurrentOrder();
+        this.client.updateScore();
+    }
+
+    public boolean hasAsignedDeliveryMan() {
+        return (this.deliveryMan != null);
+    }
+
     public int getNumber() {
         return number;
     }
@@ -148,16 +158,6 @@ public class Order {
 
     public boolean isDelivered() {
         return delivered;
-    }
-
-    public void setDelivered(boolean delivered) {
-        this.delivered = delivered;
-        this.deliveryMan.completeOrder();
-        this.client.updateScore();
-    }
-
-    public boolean hasAsignedDeliveryMan() {
-        return (this.deliveryMan != null);
     }
 
 }

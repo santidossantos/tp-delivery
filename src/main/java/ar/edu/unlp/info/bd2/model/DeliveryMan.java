@@ -11,7 +11,7 @@ import static javax.persistence.CascadeType.ALL;
 @DiscriminatorValue("2")
 public class DeliveryMan extends User {
 
-    @Column(name = "number_of_success_orders", nullable = false, columnDefinition = "int default '0'")
+    @Column(name = "number_of_success_orders", nullable = false, columnDefinition = "int default 0")
     private int numberOfSuccessOrders;
 
     @Column(name = "date_of_admission", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -31,6 +31,12 @@ public class DeliveryMan extends User {
         this.dateOfAdmission = new Date();
         this.free = true;
         this.orders = new ArrayList<>();
+    }
+
+    public void finishCurrentOrder() {
+        this.free = true;
+        this.numberOfSuccessOrders++;
+        this.setScore(this.getScore() + 1);
     }
 
     public List<Order> getOrders() {
@@ -63,12 +69,6 @@ public class DeliveryMan extends User {
 
     public void setFree(boolean free) {
         this.free = free;
-    }
-
-    public void completeOrder() {
-        this.free = true;
-        this.numberOfSuccessOrders++;
-        this.setScore(this.getScore() + 1);
     }
 
 }

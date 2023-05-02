@@ -12,6 +12,4 @@ public class ConstantValues {
 
     public static final String UPDATE_PRODUCT_ERROR = "No existe el producto a actualizar";
 
-    public static final String CREATE_ORDER_ERROR = "El numero de orden ya existe";
-
 }
