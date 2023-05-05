@@ -198,27 +198,27 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional(readOnly = true)
     public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
-        return null;
+        return deliveryRepository.getNumberOfOrderDeliveredAndBetweenDates(startDate, endDate);
     }
 
     @Transactional(readOnly = true)
     public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
-        return Optional.empty();
+        return deliveryRepository.getOrderDeliveredMoreExpansiveInDate(date);
     }
 
     @Transactional(readOnly = true)
     public List<Supplier> getSuppliersWithoutProducts() {
-        return null;
+        return deliveryRepository.getSuppliersWithoutProducts();
     }
 
     @Transactional(readOnly = true)
     public List<Product> getProductsWithPriceDateOlderThan(int days) {
-        return null;
+        return deliveryRepository.getProductsWithPriceDateOlderThan(days);
     }
 
     @Transactional(readOnly = true)
     public List<Product> getTop5MoreExpansiveProducts() {
-        return null;
+        return deliveryRepository.getTop5MoreExpansiveProducts();
     }
 
     @Transactional(readOnly = true)

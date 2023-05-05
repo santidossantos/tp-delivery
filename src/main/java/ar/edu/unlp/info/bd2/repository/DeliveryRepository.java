@@ -7,10 +7,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import org.hibernate.query.Query;
+
+import javax.persistence.TemporalType;
+
 import static ar.edu.unlp.info.bd2.constants.ConstantValues.CONSTRAINT_ERROR;
 import static ar.edu.unlp.info.bd2.constants.ConstantValues.USERNAME_ERROR;
 
@@ -120,6 +127,39 @@ public class DeliveryRepository {
 
     public Long getNumberOfOrdersNoDelivered() {
         return (Long) getSession().createQuery("select count(o) from Order o where delivered = false").uniqueResult();
+    }
+
+    public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
+        return simpleQueryFactory(
+                "select count(o) from Order o " +
+                        "where o.delivered = true and o.dateOfOrder between :startDate and :endDate", Long.class)
+                .setParameter("startDate", startDate).setParameter("endDate", endDate)
+                .getSingleResult();
+    }
+
+    public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
+        return simpleQueryFactory("from Order where delivered = true and date(dateOfOrder) = :date order by totalPrice desc", Order.class)
+                .setParameter("date", date, TemporalType.DATE)
+                .setMaxResults(1)
+                .uniqueResultOptional();
+    }
+
+    public List<Supplier> getSuppliersWithoutProducts(){
+        return simpleQueryFactory("from Supplier s where s.products is empty", Supplier.class).getResultList();
+    }
+
+    public List<Product> getProductsWithPriceDateOlderThan(int days) {
+        LocalDate maxDate = LocalDate.now().minusDays(days);
+        Date date = Date.from(maxDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return simpleQueryFactory("select p from Product p where p.lastPriceUpdateDate <= :maxDate", Product.class)
+                .setParameter("maxDate", date)
+                .getResultList();
+    }
+
+    public List<Product> getTop5MoreExpansiveProducts() {
+        return simpleQueryFactory("select p from Product p order by p.price desc", Product.class)
+                .setMaxResults(5)
+                .getResultList();
     }
 
 }
