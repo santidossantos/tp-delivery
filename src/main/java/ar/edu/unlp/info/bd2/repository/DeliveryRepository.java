@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -15,9 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import org.hibernate.query.Query;
-
 import javax.persistence.TemporalType;
-
 import static ar.edu.unlp.info.bd2.constants.ConstantValues.CONSTRAINT_ERROR;
 import static ar.edu.unlp.info.bd2.constants.ConstantValues.USERNAME_ERROR;
 
@@ -106,6 +103,8 @@ public class DeliveryRepository {
                 .setParameter("number", number).uniqueResultOptional();
     }
 
+    /*                                       ETAPA II                                             */
+
     public List<User> getTopNUserWithMoreScore(int n) {
         return simpleQueryFactory("from User order by score desc", User.class).setMaxResults(n).getResultList();
     }
@@ -128,7 +127,6 @@ public class DeliveryRepository {
     public Long getNumberOfOrdersNoDelivered() {
         return (Long) getSession().createQuery("select count(o) from Order o where delivered = false").uniqueResult();
     }
-
 
     public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
         return simpleQueryFactory(
@@ -166,7 +164,6 @@ public class DeliveryRepository {
     public Optional<Product> getMostDemandedProduct() {
         Query<Product> query = simpleQueryFactory("select p from Item i join Product p on i.product = p.id group by i.product order by sum(i.quantity) desc", Product.class);
         query.setMaxResults(1);
-
         return query.uniqueResultOptional();
     }
 
@@ -179,6 +176,7 @@ public class DeliveryRepository {
         query.setMaxResults(3);
         return query.getResultList();
     }
+
     public Optional<Supplier> getSupplierWithMoreProducts(){
         Query<Supplier> query = simpleQueryFactory("select s from Supplier s join Product p on p.supplier = s.id group by s.id order by count(p.id) desc", Supplier.class);
         query.setMaxResults(1);

@@ -161,6 +161,8 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
         return item;
     }
 
+    /*                                       ETAPA II                                             */
+
     @Transactional
     public User updateUser(User user) throws DeliveryException {
         return (User) deliveryRepository.update(user);
