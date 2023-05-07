@@ -129,6 +129,7 @@ public class DeliveryRepository {
         return (Long) getSession().createQuery("select count(o) from Order o where delivered = false").uniqueResult();
     }
 
+
     public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
         return simpleQueryFactory(
                 "select count(o) from Order o " +
@@ -160,6 +161,36 @@ public class DeliveryRepository {
         return simpleQueryFactory("select p from Product p order by p.price desc", Product.class)
                 .setMaxResults(5)
                 .getResultList();
+    }
+
+    public Optional<Product> getMostDemandedProduct() {
+        Query<Product> query = simpleQueryFactory("select p from Item i join Product p on i.product = p.id group by i.product order by sum(i.quantity) desc", Product.class);
+        query.setMaxResults(1);
+
+        return query.uniqueResultOptional();
+    }
+
+    public List<Product> getProductsNoAddedToOrders(){
+        return simpleQueryFactory("select p from Product p left outer join Item i on i.product = p.id where i.product is null", Product.class).getResultList();
+    }
+
+    public List<ProductType> getTop3ProductTypesWithLessProducts(){
+        Query<ProductType> query = simpleQueryFactory("select pt from ProductType pt join pt.products p group by pt.id order by count(p.id) asc", ProductType.class);
+        query.setMaxResults(3);
+        return query.getResultList();
+    }
+    public Optional<Supplier> getSupplierWithMoreProducts(){
+        Query<Supplier> query = simpleQueryFactory("select s from Supplier s join Product p on p.supplier = s.id group by s.id order by count(p.id) desc", Supplier.class);
+        query.setMaxResults(1);
+        return query.uniqueResultOptional();
+    }
+
+    public List<Supplier> getSupplierWith1StarCalifications(){
+        Query<Supplier> query = simpleQueryFactory("select s from Supplier s join s.products p\n" +
+                "    join Item i on i.product = p.id\n" +
+                "    join Order o on o.id = i.order\n" +
+                "    join Qualification q on q.order = o.id where q.score = 1 order by s.id asc", Supplier.class);
+        return query.getResultList();
     }
 
 }

@@ -223,27 +223,27 @@ public class DeliveryServiceImpl implements DeliveryService, DeliveryStatisticsS
 
     @Transactional(readOnly = true)
     public Product getMostDemandedProduct() {
-        return null;
+        return deliveryRepository.getMostDemandedProduct().orElse(null);
     }
 
     @Transactional(readOnly = true)
     public List<Product> getProductsNoAddedToOrders() {
-        return null;
+        return deliveryRepository.getProductsNoAddedToOrders();
     }
 
     @Transactional(readOnly = true)
     public List<ProductType> getTop3ProductTypesWithLessProducts() {
-        return null;
+        return deliveryRepository.getTop3ProductTypesWithLessProducts();
     }
 
     @Transactional(readOnly = true)
     public Supplier getSupplierWithMoreProducts() {
-        return null;
+        return deliveryRepository.getSupplierWithMoreProducts().orElse(null);
     }
 
     @Transactional(readOnly = true)
     public List<Supplier> getSupplierWith1StarCalifications() {
-        return null;
+        return deliveryRepository.getSupplierWith1StarCalifications();
     }
 
 }
