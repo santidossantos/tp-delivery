@@ -10,7 +10,7 @@ import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "`order`")
 public class Order {
 
     @Id

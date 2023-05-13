@@ -20,9 +20,6 @@ public class DeliveryMan extends User {
     @Column(name = "free", nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private boolean free;
 
-    @OneToMany(cascade = ALL)
-    private List<Order> orders = new ArrayList<>();
-
     public DeliveryMan() {}
 
     public DeliveryMan(String name, String username, String password, String email, Date dateOfBirth) {
@@ -30,21 +27,13 @@ public class DeliveryMan extends User {
         this.numberOfSuccessOrders = 0;
         this.dateOfAdmission = new Date();
         this.free = true;
-        this.orders = new ArrayList<>();
+        this.setOrders(new ArrayList<>());
     }
 
     public void finishCurrentOrder() {
         this.free = true;
         this.numberOfSuccessOrders++;
         this.setScore(this.getScore() + 1);
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     public int getNumberOfSuccessOrders() {

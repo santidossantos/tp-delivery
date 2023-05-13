@@ -8,7 +8,7 @@ import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "qualifications")
+@Table(name = "qualification")
 public class Qualification {
 
     @Id

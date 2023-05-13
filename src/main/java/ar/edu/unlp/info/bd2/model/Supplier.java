@@ -6,7 +6,7 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "suppliers")
+@Table(name = "supplier")
 public class Supplier {
 
     @Id

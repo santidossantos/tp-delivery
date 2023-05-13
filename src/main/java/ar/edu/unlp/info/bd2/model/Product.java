@@ -7,7 +7,7 @@ import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class Product {
 
     @Id
@@ -35,9 +35,9 @@ public class Product {
 
     @ManyToMany(cascade = {}, fetch = LAZY)
     @JoinTable(
-            name = "products_productstypes",
+            name = "product_product_type",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "producttype_id")
+            inverseJoinColumns = @JoinColumn(name = "product_type_id")
     )
     private List<ProductType> types;
 
