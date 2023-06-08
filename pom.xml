@@ -24,6 +24,7 @@
         <commons-dbcp.version>1.4</commons-dbcp.version>
     </properties>
 
+
     <dependencies>
 
         <dependency>
@@ -96,7 +97,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
-            <!--<scope>test</scope>-->
+           <!--<scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>junit</groupId>
