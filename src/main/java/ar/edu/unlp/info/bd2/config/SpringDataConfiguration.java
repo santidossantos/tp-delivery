@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.config;
 
 import ar.edu.unlp.info.bd2.services.DeliveryService;
+import ar.edu.unlp.info.bd2.services.SpringDataDeliveryServiceImpl;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -31,9 +31,9 @@ public class SpringDataConfiguration {
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/bd2_2023_grupo" + this.getGroupNumber()+"?useSSL=false");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/bd2_2023_grupo" + this.getGroupNumber() + "?useSSL=false");
+        dataSource.setUsername("usuario");
+        dataSource.setPassword("password");
         return dataSource;
     }
 
@@ -73,7 +73,7 @@ public class SpringDataConfiguration {
     }
 
     private Integer getGroupNumber() {
-        return 0;
+        return 6;
     }
 
 }
