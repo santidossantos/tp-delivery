@@ -2,16 +2,21 @@ package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
+import ar.edu.unlp.info.bd2.repository.ClientRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public class TestService implements DeliveryService, DeliveryStatisticsService{
+    ClientRepository clientRepository;
 
-
-    @Override
+    @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return null;
+        return (Client)
+                clientRepository.save
+                        (new Client(name, username, password, email, dateOfBirth));
     }
 
     @Override
