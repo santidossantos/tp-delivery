@@ -1,4 +1,4 @@
-package ar.edu.unlp.info.bd2.repository;
+package ar.edu.unlp.info.bd2.repositories;
 
 import ar.edu.unlp.info.bd2.model.Qualification;
 import org.springframework.data.repository.CrudRepository;

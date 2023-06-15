@@ -2,14 +2,18 @@ package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
-import ar.edu.unlp.info.bd2.repository.ClientRepository;
+import ar.edu.unlp.info.bd2.repositories.ClientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public class TestService implements DeliveryService, DeliveryStatisticsService{
+@Service
+public class TestService implements DeliveryService, DeliveryStatisticsService {
+
+    @Autowired
     ClientRepository clientRepository;
 
     @Transactional
