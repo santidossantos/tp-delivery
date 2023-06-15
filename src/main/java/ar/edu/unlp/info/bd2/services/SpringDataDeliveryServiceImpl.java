@@ -4,7 +4,7 @@ import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.ClientRepository;
 import ar.edu.unlp.info.bd2.repositories.DeliveryManRepository;
-import ar.edu.unlp.info.bd2.repositories.GenericRepository;
+import ar.edu.unlp.info.bd2.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,15 +13,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TestService implements DeliveryService, DeliveryStatisticsService {
+public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryStatisticsService {
 
     @Autowired
     ClientRepository clientRepository;
+
     @Autowired
     DeliveryManRepository deliveryManRepository;
 
     @Autowired
-    GenericRepository genericRepository;
+    UserRepository userRepository;
+
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
@@ -30,6 +32,7 @@ public class TestService implements DeliveryService, DeliveryStatisticsService {
                         (new Client(name, username, password, email, dateOfBirth));
     }
 
+
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
         return (DeliveryMan) deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
@@ -37,7 +40,7 @@ public class TestService implements DeliveryService, DeliveryStatisticsService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
-        return genericRepository.getById(id).map(user -> (User) user);
+        return userRepository.getById(id).map(user -> (User) user);
     }
 
     @Override

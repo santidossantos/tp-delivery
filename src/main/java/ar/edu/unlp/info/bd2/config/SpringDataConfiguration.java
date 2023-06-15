@@ -1,7 +1,7 @@
 package ar.edu.unlp.info.bd2.config;
 
 import ar.edu.unlp.info.bd2.services.DeliveryService;
-import ar.edu.unlp.info.bd2.services.TestService;
+import ar.edu.unlp.info.bd2.services.SpringDataDeliveryServiceImpl;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +24,7 @@ public class SpringDataConfiguration {
 
     @Bean
     public DeliveryService springDataJpaService() {
-        //return new SpringDataDeliveryServiceImpl();
-        return new TestService();
+        return new SpringDataDeliveryServiceImpl();
     }
 
     @Bean

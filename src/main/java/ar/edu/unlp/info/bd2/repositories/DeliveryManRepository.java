@@ -9,11 +9,10 @@ import java.util.Optional;
 @Repository
 public interface DeliveryManRepository extends CrudRepository<DeliveryMan, Long> {
 
-    Optional<DeliveryMan> getById(Long id);
-
     Optional<DeliveryMan> getByScore(int score);
 
     Optional<DeliveryMan> getByEmail(String email);
 
     Optional<DeliveryMan> getByUsername(String username);
+
 }
