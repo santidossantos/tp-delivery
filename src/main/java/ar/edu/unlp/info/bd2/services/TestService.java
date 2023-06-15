@@ -3,6 +3,8 @@ package ar.edu.unlp.info.bd2.services;
 import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.ClientRepository;
+import ar.edu.unlp.info.bd2.repositories.DeliveryManRepository;
+import ar.edu.unlp.info.bd2.repositories.GenericRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,11 @@ public class TestService implements DeliveryService, DeliveryStatisticsService {
 
     @Autowired
     ClientRepository clientRepository;
+    @Autowired
+    DeliveryManRepository deliveryManRepository;
+
+    @Autowired
+    GenericRepository genericRepository;
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
@@ -23,14 +30,14 @@ public class TestService implements DeliveryService, DeliveryStatisticsService {
                         (new Client(name, username, password, email, dateOfBirth));
     }
 
-    @Override
+    @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return null;
+        return (DeliveryMan) deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
-        return Optional.empty();
+        return genericRepository.getById(id).map(user -> (User) user);
     }
 
     @Override

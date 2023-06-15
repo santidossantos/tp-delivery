@@ -53,20 +53,20 @@ public class DeliveryServiceTest {
 		 */
 		Client client = this.service.createClient("Juan Perez", "jperez", "1234", "jperez@gmail.com", dob1);
 		assertNotNull(client.getId());
-		/*assertEquals(0, client.getScore());
+		assertEquals(0, client.getScore());
 		assertEquals("jperez@gmail.com", client.getEmail());
 
-		*//**
+		/**
 		 * Creción de Usuario tipo DeliveryMan
-		 *//*
+		 */
 		DeliveryMan deliveryMan = this.service.createDeliveryMan("Ramiro Benítez", "rbenitez", "1234", "rbenitez@gmail.com", dob2);
 		assertNotNull(deliveryMan.getId());
 		assertEquals(0, deliveryMan.getScore());
 		assertEquals("rbenitez", deliveryMan.getUsername());
 
-		*//**
+		/**
 		 * Obtención de Usuario por ID
-		 *//*
+		 */
 		Long idClient = client.getId();
 		Optional<User> optionalUser1 = this.service.getUserById(idClient);
 		assertTrue(optionalUser1.isPresent());
@@ -77,9 +77,9 @@ public class DeliveryServiceTest {
 		assertEquals("jperez", client1.getUsername());
 		assertEquals("jperez@gmail.com", client1.getEmail());
 
-		*//**
+		/**
 		 * Obtención de Usuario por Email
-		 *//*
+		 */
 		Long idDeliveryMan = deliveryMan.getId();
 		Optional<User> optionalUser2 = this.service.getUserById(idDeliveryMan);
 		assertTrue(optionalUser2.isPresent());
@@ -91,7 +91,6 @@ public class DeliveryServiceTest {
 		assertEquals("rbenitez@gmail.com", deliveryMan1.getEmail());
 
 		assertFalse(this.service.getUserByEmail("otromail@gmail.com").isPresent());
-		*/
 	}
 
 	@Test

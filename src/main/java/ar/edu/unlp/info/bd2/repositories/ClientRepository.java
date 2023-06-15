@@ -10,5 +10,10 @@ import java.util.Optional;
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
     Optional<Client> getById(Long id);
+    Optional<Client> getByScore(int score);
+
+    Optional<Client> getByEmail(String email);
+
+    Optional<Client> getByUsername(String username);
 
 }
