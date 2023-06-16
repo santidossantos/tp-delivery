@@ -1,4 +1,9 @@
 package ar.edu.unlp.info.bd2.repositories;
 
-public interface SupplierRepository {
+import ar.edu.unlp.info.bd2.model.Supplier;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface SupplierRepository extends CrudRepository<Supplier, Long> {
 }

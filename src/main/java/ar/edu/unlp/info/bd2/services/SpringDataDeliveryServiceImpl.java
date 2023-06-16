@@ -2,15 +2,15 @@ package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
-import ar.edu.unlp.info.bd2.repositories.ClientRepository;
-import ar.edu.unlp.info.bd2.repositories.DeliveryManRepository;
-import ar.edu.unlp.info.bd2.repositories.UserRepository;
+import ar.edu.unlp.info.bd2.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.PRODUCT_ERROR;
 
 @Service
 public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryStatisticsService {
@@ -23,6 +23,18 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    ProductTypeRepository productTypeRepository;
+
+    @Autowired
+    SupplierRepository supplierRepository;
 
 
     @Transactional
@@ -58,14 +70,14 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return null;
     }
 
-    @Override
+    @Transactional
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        return null;
+        return addressRepository.save(new Address(name, address, apartment, coordX, coordY, description, client));
     }
 
-    @Override
+    @Transactional
     public Address createAddress(String name, String address, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        return null;
+        return addressRepository.save(new Address(name, address, coordX, coordY, description, client));
     }
 
     @Override
@@ -78,44 +90,47 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return Optional.empty();
     }
 
-    @Override
-    public Supplier createSupplier(String name, String cuil, String address, float coordX, float coordY) throws DeliveryException {
-        return null;
+    @Transactional
+    public Supplier createSupplier(String name, String cuit, String address, float coordX, float coordY) throws DeliveryException {
+        return supplierRepository.save(new Supplier(name, cuit, address, coordX, coordY));
     }
+
 
     @Override
     public List<Supplier> getSupplierByName(String name) {
         return null;
     }
 
-    @Override
+    @Transactional
     public ProductType createProductType(String name, String description) throws DeliveryException {
-        return null;
+        return (ProductType) productTypeRepository.save(new ProductType(name, description));
     }
 
-    @Override
+    @Transactional
     public Product createProduct(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        return null;
+        return (Product) productRepository.save(new Product(name, price, weight, description, supplier, types));
     }
 
-    @Override
+    @Transactional
     public Product createProduct(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        return null;
+        return (Product) productRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Optional<Product> getProductById(Long id) {
-        return Optional.empty();
+        return productRepository.findById(id);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductByName(String name) {
-        return null;
+        return productRepository.findByNameContaining(name);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsByType(String type) throws DeliveryException {
-        return null;
+        List<Product> productsByType = productRepository.findByTypesName(type);
+        if (productsByType.isEmpty()) throw new DeliveryException(PRODUCT_ERROR);
+        return productsByType;
     }
 
     @Override
