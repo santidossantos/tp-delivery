@@ -1,9 +1,11 @@
 package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
+import ar.edu.unlp.info.bd2.constants.ConstantValues;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.ClientRepository;
 import ar.edu.unlp.info.bd2.repositories.DeliveryManRepository;
+import ar.edu.unlp.info.bd2.repositories.SupplierRepository;
 import ar.edu.unlp.info.bd2.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.CONSTRAINT_ERROR;
 
 @Service
 public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryStatisticsService {
@@ -24,23 +28,24 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SupplierRepository supplierRepository;
+
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return (Client)
-                clientRepository.save
-                        (new Client(name, username, password, email, dateOfBirth));
+        return clientRepository.save(new Client(name, username, password, email, dateOfBirth));
     }
 
 
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return (DeliveryMan) deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
+        return deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
     }
 
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
-        return userRepository.getById(id).map(user -> (User) user);
+        return userRepository.getById(id);
     }
 
     @Override
@@ -78,14 +83,15 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return Optional.empty();
     }
 
-    @Override
-    public Supplier createSupplier(String name, String cuil, String address, float coordX, float coordY) throws DeliveryException {
-        return null;
+    @Transactional
+    public Supplier createSupplier(String name, String cuit, String address, float coordX, float coordY) throws DeliveryException {
+        if(supplierRepository.existsByCuit(cuit)) throw new DeliveryException(CONSTRAINT_ERROR);
+        return supplierRepository.save(new Supplier(name, cuit, address, coordX, coordY));
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Supplier> getSupplierByName(String name) {
-        return null;
+        return supplierRepository.findByNameContaining(name);
     }
 
     @Override
