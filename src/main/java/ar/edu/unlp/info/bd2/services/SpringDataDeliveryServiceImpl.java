@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
+import ar.edu.unlp.info.bd2.constants.ConstantValues;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static ar.edu.unlp.info.bd2.constants.ConstantValues.PRODUCT_ERROR;
+import static ar.edu.unlp.info.bd2.constants.ConstantValues.*;
 
 @Service
 public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryStatisticsService {
@@ -39,15 +39,13 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return (Client)
-                clientRepository.save
-                        (new Client(name, username, password, email, dateOfBirth));
+        return clientRepository.save(new Client(name, username, password, email, dateOfBirth));
     }
 
 
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return (DeliveryMan) deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
+        return deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
     }
 
     @Transactional(readOnly = true)
@@ -92,13 +90,13 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public Supplier createSupplier(String name, String cuit, String address, float coordX, float coordY) throws DeliveryException {
+        if(supplierRepository.existsByCuit(cuit)) throw new DeliveryException(CONSTRAINT_ERROR);
         return supplierRepository.save(new Supplier(name, cuit, address, coordX, coordY));
     }
 
-
-    @Override
+    @Transactional(readOnly = true)
     public List<Supplier> getSupplierByName(String name) {
-        return null;
+        return supplierRepository.findByNameContaining(name);
     }
 
     @Transactional
