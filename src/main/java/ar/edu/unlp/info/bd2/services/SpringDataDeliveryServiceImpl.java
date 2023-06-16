@@ -35,12 +35,17 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     @Autowired
     SupplierRepository supplierRepository;
 
+    @Autowired
+    OrderRepository orderRepository;
+
+    @Autowired
+    ItemRepository itemRepository;
+
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
         return clientRepository.save(new Client(name, username, password, email, dateOfBirth));
     }
-
 
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
@@ -77,14 +82,15 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return addressRepository.save(new Address(name, address, coordX, coordY, description, client));
     }
 
-    @Override
+    @Transactional
     public Order createOrder(int number, Date dateOfOrder, String comments, Client client, Address address) throws DeliveryException {
-        return null;
+        if(orderRepository.existsByNumber(number)) throw new DeliveryException(CONSTRAINT_ERROR);
+        return orderRepository.save(new Order(number, dateOfOrder, comments, client, address));
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Optional<Order> getOrderById(Long id) {
-        return Optional.empty();
+        return orderRepository.findById(id);
     }
 
     @Transactional
@@ -130,9 +136,11 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return productsByType;
     }
 
-    @Override
+    @Transactional
     public Product updateProductPrice(Long id, float price) throws DeliveryException {
-        return null;
+        Product product = this.getProductById(id).orElseThrow(() -> new DeliveryException(UPDATE_PRODUCT_ERROR));
+        product.updateProductPrice(price);
+        return this.productRepository.save(product);
     }
 
     @Override
@@ -150,9 +158,14 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return null;
     }
 
-    @Override
+    @Transactional
     public Item addItemToOrder(Long order, Product product, int quantity, String description) throws DeliveryException {
-        return null;
+        Order ord = orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        if(ord.isDelivered()) throw new DeliveryException(ORDER_ERROR);
+        Item item = new Item(ord, product, quantity, description);
+        ord.addItem(item);
+        itemRepository.save(item);
+        return item;
     }
 
     @Override
@@ -239,4 +252,5 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     public List<Supplier> getSupplierWith1StarCalifications() {
         return null;
     }
+
 }
