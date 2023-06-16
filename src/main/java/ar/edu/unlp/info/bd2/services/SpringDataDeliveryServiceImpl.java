@@ -52,7 +52,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id) {
-        return userRepository.getById(id).map(user -> (User) user);
+        return userRepository.findById(id);
     }
 
     @Override
