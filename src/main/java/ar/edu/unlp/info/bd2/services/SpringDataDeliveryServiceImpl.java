@@ -1,7 +1,6 @@
 package ar.edu.unlp.info.bd2.services;
 
 import ar.edu.unlp.info.bd2.DeliveryException;
-import ar.edu.unlp.info.bd2.constants.ConstantValues;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,17 +100,17 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public ProductType createProductType(String name, String description) throws DeliveryException {
-        return (ProductType) productTypeRepository.save(new ProductType(name, description));
+        return productTypeRepository.save(new ProductType(name, description));
     }
 
     @Transactional
     public Product createProduct(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        return (Product) productRepository.save(new Product(name, price, weight, description, supplier, types));
+        return productRepository.save(new Product(name, price, weight, description, supplier, types));
     }
 
     @Transactional
     public Product createProduct(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        return (Product) productRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
+        return productRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
     }
 
     @Transactional(readOnly = true)
