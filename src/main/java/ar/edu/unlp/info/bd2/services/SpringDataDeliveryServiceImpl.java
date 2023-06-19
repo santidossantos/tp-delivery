@@ -41,6 +41,9 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     @Autowired
     ItemRepository itemRepository;
 
+    @Autowired
+    QualificationRepository qualificationRepository;
+
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
@@ -165,9 +168,14 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return true;
     }
 
-    @Override
+    @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
-        return null;
+        Order order1 = (Order) this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        if(!order1.isDelivered()) throw new DeliveryException(ORDER_ERROR);
+        Qualification qualification = new Qualification(commentary, order1);
+        order1.setQualification(qualification);
+        this.qualificationRepository.save(qualification);
+        return qualification;
     }
 
     @Transactional
