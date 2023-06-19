@@ -62,9 +62,9 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return Optional.empty();
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Optional<DeliveryMan> getAFreeDeliveryMan() {
-        return Optional.empty();
+        return Optional.ofNullable(deliveryManRepository.findByFreeTrue().orElse(null));
     }
 
     @Override
@@ -143,14 +143,26 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return this.productRepository.save(product);
     }
 
-    @Override
+    @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
-        return false;
+        Order order1 = (Order) this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) return false;
+        order1.setDeliveryMan(deliveryMan);
+        this.orderRepository.save(order1);
+        return true;
     }
 
-    @Override
+    private static boolean checkAddDeliveryManToOrderConditions(DeliveryMan deliveryMan, Order order1) {
+        return order1.getItems().size() == 0 || !deliveryMan.isFree();
+    }
+
+    @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
-        return false;
+        Order order1 = (Order) this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        if(!order1.hasAsignedDeliveryMan()) return false;
+        order1.setDelivered(true);
+        this.orderRepository.save(order1);  // Hace update en cascada tambien de cliente y deliveryMan por como estan definidas las relaciones
+        return true;
     }
 
     @Override

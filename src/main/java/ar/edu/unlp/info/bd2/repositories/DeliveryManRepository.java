@@ -14,4 +14,6 @@ public interface DeliveryManRepository extends CrudRepository<DeliveryMan, Long>
 
     Optional<DeliveryMan> findByUsername(String username);
 
+    Optional<DeliveryMan> findByFreeTrue();
+
 }
