@@ -60,9 +60,9 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return userRepository.findById(id);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Optional<User> getUserByEmail(String email) {
-        return Optional.empty();
+        return userRepository.findByEmail(email.toLowerCase());
     }
 
     @Transactional(readOnly = true)
@@ -70,9 +70,13 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return Optional.ofNullable(deliveryManRepository.findByFreeTrue().orElse(null));
     }
 
-    @Override
+    @Transactional
     public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
-        return null;
+        try {
+            return deliveryManRepository.save(deliveryMan1); // PREGUNTAR
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional
@@ -109,16 +113,19 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public ProductType createProductType(String name, String description) throws DeliveryException {
+        if(productTypeRepository.existsByName(name)) throw new DeliveryException(CONSTRAINT_ERROR);
         return productTypeRepository.save(new ProductType(name, description));
     }
 
     @Transactional
     public Product createProduct(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
+        if(productRepository.existsByName(name)) throw new DeliveryException(CONSTRAINT_ERROR);
         return productRepository.save(new Product(name, price, weight, description, supplier, types));
     }
 
     @Transactional
     public Product createProduct(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
+        if(productRepository.existsByName(name)) throw new DeliveryException(CONSTRAINT_ERROR);
         return productRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
     }
 
@@ -148,7 +155,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public boolean addDeliveryManToOrder(Long order, DeliveryMan deliveryMan) throws DeliveryException {
-        Order order1 = (Order) this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        Order order1 = this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
         if (checkAddDeliveryManToOrderConditions(deliveryMan, order1)) return false;
         order1.setDeliveryMan(deliveryMan);
         this.orderRepository.save(order1);
@@ -161,7 +168,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public boolean setOrderAsDelivered(Long order) throws DeliveryException {
-        Order order1 = (Order) this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        Order order1 = this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
         if(!order1.hasAsignedDeliveryMan()) return false;
         order1.setDelivered(true);
         this.orderRepository.save(order1);  // Hace update en cascada tambien de cliente y deliveryMan por como estan definidas las relaciones
@@ -170,7 +177,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public Qualification addQualificatioToOrder(Long order, String commentary) throws DeliveryException {
-        Order order1 = (Order) this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
+        Order order1 = this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
         if(!order1.isDelivered()) throw new DeliveryException(ORDER_ERROR);
         Qualification qualification = new Qualification(commentary, order1);
         order1.setQualification(qualification);

@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface ProductTypeRepository extends CrudRepository<ProductType, Long> {
 
+    boolean existsByName(String name);
+
 }
