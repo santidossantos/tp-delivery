@@ -10,8 +10,4 @@ public interface AddressRepository extends CrudRepository<Address, Long> {
 
     Optional<Address> findById(Long id);
 
-    Optional<Address> findByName(String name);
-
-    Optional<Address> findByAddress(String address);
-
 }

@@ -8,12 +8,6 @@ import java.util.Optional;
 @Repository
 public interface DeliveryManRepository extends CrudRepository<DeliveryMan, Long> {
 
-    Optional<DeliveryMan> findByScore(int score);
-
-    Optional<DeliveryMan> findByEmail(String email);
-
-    Optional<DeliveryMan> findByUsername(String username);
-
     Optional<DeliveryMan> findByFreeTrue();
 
 }

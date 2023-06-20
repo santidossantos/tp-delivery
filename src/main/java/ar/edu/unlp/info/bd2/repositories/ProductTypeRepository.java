@@ -8,6 +8,4 @@ import java.util.List;
 @Repository
 public interface ProductTypeRepository extends CrudRepository<ProductType, Long> {
 
-    List<ProductType> findByNameContaining(String name);
-
 }

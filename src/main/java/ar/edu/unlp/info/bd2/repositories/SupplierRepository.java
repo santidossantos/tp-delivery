@@ -12,4 +12,5 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
     List<Supplier> findByNameContaining(String name);
 
     boolean existsByCuit(String cuit);
+
 }

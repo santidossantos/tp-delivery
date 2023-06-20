@@ -9,10 +9,4 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
-    Optional<Client> findByScore(int score);
-
-    Optional<Client> findByEmail(String email);
-
-    Optional<Client> findByUsername(String username);
-
 }
