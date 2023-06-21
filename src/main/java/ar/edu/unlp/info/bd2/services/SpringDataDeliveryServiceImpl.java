@@ -4,8 +4,12 @@ import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -195,24 +199,34 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return item;
     }
 
-    @Override
+    @Transactional
     public User updateUser(User user) throws DeliveryException {
-        return null;
+        Optional<User> user1 = userRepository.findById(user.getId());
+        if (user1.isPresent()){
+            return userRepository.save(user);
+        }
+        throw new DeliveryException(CONSTRAINT_ERROR);
     }
 
-    @Override
+
+    @Transactional
     public Qualification updateQualification(Qualification qualification) throws DeliveryException {
-        return null;
+        Optional<Qualification> q = qualificationRepository.findById(qualification.getId());
+        if (q.isPresent()){
+            return qualificationRepository.save(qualification);
+        }
+        throw new DeliveryException(CONSTRAINT_ERROR);
     }
 
     @Override
     public List<User> getTopNUserWithMoreScore(int n) {
-        return null;
+        return userRepository.findAllByOrderByScoreDesc(PageRequest.of(0, n));
+
     }
 
-    @Override
+    @Transactional
     public List<DeliveryMan> getTop10DeliveryManWithMoreOrders() {
-        return null;
+        return deliveryManRepository.findAllByOrderByNumberOfSuccessOrdersDesc(PageRequest.of(0, 10));
     }
 
     @Override
@@ -222,37 +236,43 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Override
     public List<Order> getAllOrdersFromUser(String username) {
-        return null;
+        return orderRepository.findByClientUsername(username);
     }
 
     @Override
     public Long getNumberOfOrderNoDelivered() {
-        return null;
+        return orderRepository.countByDeliveredFalse();
     }
 
     @Override
     public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
-        return null;
+        return orderRepository.countByDeliveredTrueAndDateOfOrderBetween(startDate, endDate);
     }
 
     @Override
     public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
+        List<Order> order = orderRepository.findByDeliveredTrueAndDateOfOrderEqualsOrderByTotalPriceDesc(date, PageRequest.of(0, 1));
+        if (!order.isEmpty()){
+            return Optional.ofNullable(order.get(0));
+        }
         return Optional.empty();
     }
 
-    @Override
+    @Transactional
     public List<Supplier> getSuppliersWithoutProducts() {
-        return null;
+        return supplierRepository.findByProductsNull();
     }
 
     @Override
     public List<Product> getProductsWithPriceDateOlderThan(int days) {
-        return null;
+        LocalDate maxDate = LocalDate.now().minusDays(days);
+        Date date = Date.from(maxDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return productRepository.findByLastPriceUpdateDateLessThanEqual(date);
     }
 
     @Override
     public List<Product> getTop5MoreExpansiveProducts() {
-        return null;
+        return productRepository.findAllByOrderByPriceDesc(PageRequest.of(0,5));
     }
 
     @Override
@@ -277,7 +297,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Override
     public List<Supplier> getSupplierWith1StarCalifications() {
-        return null;
+        return supplierRepository.getSupplierWith1StarCalifications();
     }
 
 }
