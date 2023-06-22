@@ -35,7 +35,7 @@ public abstract class User {
     @Column(name = "score", nullable = false)
     private int score;
 
-    @OneToMany(cascade = ALL)
+    @OneToMany(mappedBy = "client", targetEntity=Order.class,  fetch=FetchType.EAGER, cascade = ALL)
     private List<Order> orders = new ArrayList<>();
 
     public User() {}

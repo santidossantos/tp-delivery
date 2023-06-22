@@ -36,7 +36,7 @@ public class Order {
     @JoinColumn(name = "delivery_man_id")
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(cascade = PERSIST, optional = false)
+    @ManyToOne(cascade = PERSIST)
     @JoinColumn(name = "client_id")
     private Client client;
 
