@@ -280,17 +280,17 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return null;
     }
 
-    @Override
+    @Override   // NO ES POSIBLE LLEGAR A ORDERS DESDE PRODUCTS... SIN @QUERY
     public List<Product> getProductsNoAddedToOrders() {
         return null;
     }
 
-    @Override
+    @Override   // USAR NOTACION @QUERY POR LO DEL GROUP BY
     public List<ProductType> getTop3ProductTypesWithLessProducts() {
         return null;
     }
 
-    @Override
+    @Override   // USAR NOTACION @QUERY POR LO DEL GROUP BY
     public Supplier getSupplierWithMoreProducts() {
         return null;
     }
