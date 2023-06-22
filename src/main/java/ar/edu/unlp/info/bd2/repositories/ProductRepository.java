@@ -24,7 +24,4 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
     List<Product> findAllByOrderByPriceDesc(Pageable pageable);
 
-    List<Product> findByItemsIsNull();
-
-
 }
