@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.bd2.repositories;
 
+import ar.edu.unlp.info.bd2.model.Client;
 import ar.edu.unlp.info.bd2.model.DeliveryMan;
 import ar.edu.unlp.info.bd2.model.User;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     List<User> findAllByOrderByScoreDesc(Pageable pageable);
-
 
 }

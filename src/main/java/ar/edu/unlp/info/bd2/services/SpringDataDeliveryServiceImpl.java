@@ -229,27 +229,27 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return deliveryManRepository.findAllByOrderByNumberOfSuccessOrdersDesc(PageRequest.of(0, 10));
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Client> getUsersSpentMoreThan(float number) {
-        return null;
+        return clientRepository.findDistinctByOrdersTotalPriceGreaterThan(number);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Order> getAllOrdersFromUser(String username) {
         return orderRepository.findByClientUsername(username);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Long getNumberOfOrderNoDelivered() {
         return orderRepository.countByDeliveredFalse();
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Long getNumberOfOrderDeliveredAndBetweenDates(Date startDate, Date endDate) {
         return orderRepository.countByDeliveredTrueAndDateOfOrderBetween(startDate, endDate);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
         List<Order> order = orderRepository.findByDeliveredTrueAndDateOfOrderEqualsOrderByTotalPriceDesc(date, PageRequest.of(0, 1));
         if (!order.isEmpty()){
@@ -263,14 +263,14 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return supplierRepository.findByProductsNull();
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsWithPriceDateOlderThan(int days) {
         LocalDate maxDate = LocalDate.now().minusDays(days);
         Date date = Date.from(maxDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         return productRepository.findByLastPriceUpdateDateLessThanEqual(date);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Product> getTop5MoreExpansiveProducts() {
         return productRepository.findAllByOrderByPriceDesc(PageRequest.of(0,5));
     }
@@ -295,7 +295,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return null;
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<Supplier> getSupplierWith1StarCalifications() {
         return supplierRepository.getSupplierWith1StarCalifications();
     }
