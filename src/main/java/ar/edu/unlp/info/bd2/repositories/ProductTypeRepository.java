@@ -10,4 +10,6 @@ public interface ProductTypeRepository extends CrudRepository<ProductType, Long>
 
     boolean existsByName(String name);
 
+    //List<ProductType> findTop3ByProductSize();
+
 }

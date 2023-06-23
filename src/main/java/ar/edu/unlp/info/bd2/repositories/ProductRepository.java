@@ -2,6 +2,7 @@ package ar.edu.unlp.info.bd2.repositories;
 
 import ar.edu.unlp.info.bd2.model.Product;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,5 +24,8 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Product> findByLastPriceUpdateDateLessThanEqual(Date date);
 
     List<Product> findAllByOrderByPriceDesc(Pageable pageable);
+
+    @Query("SELECT p FROM Product p LEFT JOIN Item i ON i.product = p.id WHERE i.product IS NULL")
+    List<Product> findProductsWithoutItems();
 
 }
