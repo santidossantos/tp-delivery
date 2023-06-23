@@ -293,7 +293,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         //Pageable page = PageRequest.of(0,3);
         //Page<ProductType> pagina = productTypeRepository.findAllByOrderByProductsSizeAsc(page);
         //return productTypeRepository.findTop3ByProductSize();
-        return null;
+        return productTypeRepository.getProductTypesOrderByProductCountAsc(PageRequest.of(0,3));
     }
 
     @Transactional(readOnly = true)   // USAR SIZE DE LISTAS ?
