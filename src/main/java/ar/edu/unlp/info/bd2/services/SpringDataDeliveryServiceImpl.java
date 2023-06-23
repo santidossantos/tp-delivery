@@ -288,7 +288,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return productRepository.findProductsWithoutItems();
     }
 
-    @Override   // USAR SIZE DE LISTAS ?
+    @Transactional(readOnly = true)  // USAR SIZE DE LISTAS ?
     public List<ProductType> getTop3ProductTypesWithLessProducts() {
         //Pageable page = PageRequest.of(0,3);
         //Page<ProductType> pagina = productTypeRepository.findAllByOrderByProductsSizeAsc(page);
@@ -296,12 +296,12 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return null;
     }
 
-    @Override   // USAR SIZE DE LISTAS ?
+    @Transactional(readOnly = true)   // USAR SIZE DE LISTAS ?
     public Supplier getSupplierWithMoreProducts() {
-        return null;
+        return supplierRepository.findSuppliersOrderedByProductCount().get(0);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // SE PUEDE RESOLVER SIN QUERY?
     public List<Supplier> getSupplierWith1StarCalifications() {
         return supplierRepository.getSupplierWith1StarCalifications();
     }

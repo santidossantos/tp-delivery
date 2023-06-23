@@ -14,14 +14,15 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
 
     boolean existsByCuit(String cuit);
 
-
-
     List<Supplier> findByProductsNull();
 
-    @Query(value="SELECT * FROM suppliers s inner join products p on p.supplier_id = s.id \n" +
-            "inner join items i on i.product_id = p.id\n" +
-            "inner join orders o on o.id = i.order_id\n" +
-            "inner join qualifications q on q.order_id = o.id where q.score = 1 order by s.id asc", nativeQuery=true)
+    @Query("SELECT s FROM Supplier s JOIN Product p ON p.supplier = s.id GROUP BY s.id ORDER BY COUNT(p.id) DESC")
+    List<Supplier> findSuppliersOrderedByProductCount();
+
+    @Query("select distinct s from Supplier s join s.products p" +
+            "    join Item i on i.product = p.id" +
+            "    join Order o on o.id = i.order" +
+            "    join Qualification q on q.order = o.id where q.score = 1 order by s.id asc")
     List<Supplier> getSupplierWith1StarCalifications();
 
 
