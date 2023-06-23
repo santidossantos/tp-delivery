@@ -4,7 +4,9 @@ import ar.edu.unlp.info.bd2.DeliveryException;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -277,7 +279,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true) // USAR NOTACION @QUERY POR LO DEL GROUP BY
     public Product getMostDemandedProduct() {
-        return null;
+        return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).get(0);
     }
 
     // NO ES POSIBLE LLEGAR A ORDERS NI A ITEMS DESDE PRODUCTS... SIN @QUERY
@@ -288,6 +290,8 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Override   // USAR SIZE DE LISTAS ?
     public List<ProductType> getTop3ProductTypesWithLessProducts() {
+        //Pageable page = PageRequest.of(0,3);
+        //Page<ProductType> pagina = productTypeRepository.findAllByOrderByProductsSizeAsc(page);
         //return productTypeRepository.findTop3ByProductSize();
         return null;
     }
