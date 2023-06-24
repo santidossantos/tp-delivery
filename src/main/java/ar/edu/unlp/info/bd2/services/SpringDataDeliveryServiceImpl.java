@@ -277,6 +277,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return productRepository.findAllByOrderByPriceDesc(PageRequest.of(0,5));
     }
 
+
     @Transactional(readOnly = true) // USAR NOTACION @QUERY POR LO DEL GROUP BY
     public Product getMostDemandedProduct() {
         return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).get(0);
