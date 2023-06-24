@@ -79,7 +79,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     @Transactional
     public DeliveryMan updateDeliveryMan(DeliveryMan deliveryMan1) throws DeliveryException {
         try {
-            return deliveryManRepository.save(deliveryMan1); // PREGUNTAR
+            return deliveryManRepository.save(deliveryMan1);
         } catch (Exception e) {
             throw new DeliveryException(CONSTRAINT_ERROR);
         }
@@ -177,7 +177,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         Order order1 = this.orderRepository.findById(order).orElseThrow(() -> new DeliveryException(ORDER_ERROR));
         if(!order1.hasAsignedDeliveryMan()) return false;
         order1.setDelivered(true);
-        this.orderRepository.save(order1);  // Hace update en cascada tambien de cliente y deliveryMan por como estan definidas las relaciones
+        this.orderRepository.save(order1);
         return true;
     }
 
@@ -204,29 +204,26 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     @Transactional
     public User updateUser(User user) throws DeliveryException {
         Optional<User> user1 = userRepository.findById(user.getId());
-        if (user1.isPresent()){
+        if (user1.isPresent())
             return userRepository.save(user);
-        }
         throw new DeliveryException(CONSTRAINT_ERROR);
     }
-
 
     @Transactional
     public Qualification updateQualification(Qualification qualification) throws DeliveryException {
         Optional<Qualification> q = qualificationRepository.findById(qualification.getId());
-        if (q.isPresent()){
+        if (q.isPresent())
             return qualificationRepository.save(qualification);
-        }
         throw new DeliveryException(CONSTRAINT_ERROR);
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<User> getTopNUserWithMoreScore(int n) {
         return userRepository.findAllByOrderByScoreDesc(PageRequest.of(0, n));
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<DeliveryMan> getTop10DeliveryManWithMoreOrders() {
         return deliveryManRepository.findAllByOrderByNumberOfSuccessOrdersDesc(PageRequest.of(0, 10));
     }
@@ -254,13 +251,12 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     @Transactional(readOnly = true)
     public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
         List<Order> order = orderRepository.findByDeliveredTrueAndDateOfOrderEqualsOrderByTotalPriceDesc(date, PageRequest.of(0, 1));
-        if (!order.isEmpty()){
+        if (!order.isEmpty())
             return Optional.ofNullable(order.get(0));
-        }
         return Optional.empty();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Supplier> getSuppliersWithoutProducts() {
         return supplierRepository.findByProductsNull();
     }
@@ -277,33 +273,31 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         return productRepository.findAllByOrderByPriceDesc(PageRequest.of(0,5));
     }
 
-
-    @Transactional(readOnly = true) // USAR NOTACION @QUERY POR LO DEL GROUP BY
-    public Product getMostDemandedProduct() {
+    @Transactional(readOnly = true)
+    public Product getMostDemandedProduct() {               // USAR NOTACION @QUERY POR LO DEL GROUP BY
         return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).get(0);
     }
 
-    // NO ES POSIBLE LLEGAR A ORDERS NI A ITEMS DESDE PRODUCTS... SIN @QUERY
     @Transactional(readOnly = true)
     public List<Product> getProductsNoAddedToOrders() {
-        return productRepository.findProductsWithoutItems();
+        return productRepository.findProductsWithoutItems();  // NO ES POSIBLE LLEGAR A ORDERS NI A ITEMS DESDE PRODUCTS... SIN @QUERY
     }
 
-    @Transactional(readOnly = true)  // USAR SIZE DE LISTAS ?
-    public List<ProductType> getTop3ProductTypesWithLessProducts() {
+    @Transactional(readOnly = true)
+    public List<ProductType> getTop3ProductTypesWithLessProducts() {        // USAR SIZE DE LISTAS ?
         //Pageable page = PageRequest.of(0,3);
         //Page<ProductType> pagina = productTypeRepository.findAllByOrderByProductsSizeAsc(page);
         //return productTypeRepository.findTop3ByProductSize();
         return productTypeRepository.getProductTypesOrderByProductCountAsc(PageRequest.of(0,3));
     }
 
-    @Transactional(readOnly = true)   // USAR SIZE DE LISTAS ?
-    public Supplier getSupplierWithMoreProducts() {
+    @Transactional(readOnly = true)
+    public Supplier getSupplierWithMoreProducts() {                         // USAR SIZE DE LISTAS ?
         return supplierRepository.findSuppliersOrderedByProductCount().get(0);
     }
 
-    @Transactional(readOnly = true) // SE PUEDE RESOLVER SIN QUERY?
-    public List<Supplier> getSupplierWith1StarCalifications() {
+    @Transactional(readOnly = true)
+    public List<Supplier> getSupplierWith1StarCalifications() {             // SE PUEDE RESOLVER SIN QUERY?
         return supplierRepository.getSupplierWith1StarCalifications();
     }
 
