@@ -293,7 +293,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true)
     public Supplier getSupplierWithMoreProducts() {                         // USAR SIZE DE LISTAS ?
-        return supplierRepository.findSuppliersOrderedByProductCount().get(0);
+        return supplierRepository.findSuppliersOrderedByProductCount().stream().findFirst().orElse(null);
     }
 
     @Transactional(readOnly = true)
