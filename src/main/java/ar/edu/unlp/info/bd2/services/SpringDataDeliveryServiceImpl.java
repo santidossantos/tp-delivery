@@ -280,8 +280,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true)
     public List<Product> getProductsNoAddedToOrders() {
-        List<Long> productsInItemsIds = itemRepository.findAll().stream().map(i -> i.getProduct().getId()).collect(Collectors.toList());
-        return productRepository.findAllByIdNotIn(productsInItemsIds);
+        return productRepository.findAllByIdNotIn();
     }
 
     @Transactional(readOnly = true)
@@ -291,7 +290,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true)
     public Supplier getSupplierWithMoreProducts() {
-        return supplierRepository.findBySuppliersOrderedByProductCount().stream().findFirst().orElse(null);
+        return supplierRepository.findBySuppliersOrderedByProductCount(PageRequest.of(0,1)).get(0);
     }
 
     @Transactional(readOnly = true)

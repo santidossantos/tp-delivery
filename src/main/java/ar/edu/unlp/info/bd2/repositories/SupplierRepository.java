@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.repositories;
 
 import ar.edu.unlp.info.bd2.model.Supplier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,7 +23,7 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
      *      para nombre de metodo                                                         *
      *                                                                                    */
     @Query("SELECT s FROM Supplier s ORDER BY SIZE(s.products) DESC")
-    List<Supplier> findBySuppliersOrderedByProductCount();
+    List<Supplier> findBySuppliersOrderedByProductCount(Pageable pageable);
 
     /*                                                                                    *
      *      En este metodo se opta por usar la Notacion @Query ya que no es posible       *

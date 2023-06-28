@@ -22,7 +22,8 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
     List<Product> findAllByOrderByPriceDesc(Pageable pageable);
 
-    List<Product> findAllByIdNotIn(List<Long> ids);
+    @Query("SELECT p FROM Product p WHERE p.id NOT IN (SELECT i.product.id FROM Item i )")
+    List<Product> findAllByIdNotIn();
 
     /*                                                                                    *
      *      En este metodo se opta por usar la Notacion @Query ya que no es posible       *
