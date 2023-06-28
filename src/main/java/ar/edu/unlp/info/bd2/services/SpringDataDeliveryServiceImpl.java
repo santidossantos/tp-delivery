@@ -275,7 +275,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true)
     public Product getMostDemandedProduct() {
-        return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).get(0);
+        return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).stream().findFirst().orElse(null);
     }
 
     @Transactional(readOnly = true)

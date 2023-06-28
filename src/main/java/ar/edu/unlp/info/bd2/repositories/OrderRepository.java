@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
 
-    Optional<Order> findById(Long id);
-
     boolean existsByNumber(int number);
 
     Long countByDeliveredTrueAndDateOfOrderBetween(Date startDate, Date endDate);

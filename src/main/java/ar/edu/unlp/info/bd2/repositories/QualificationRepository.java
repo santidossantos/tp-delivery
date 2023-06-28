@@ -8,6 +8,4 @@ import java.util.Optional;
 @Repository
 public interface QualificationRepository extends CrudRepository<Qualification, Long> {
 
-    Optional<Qualification> findById(Long id);
-
 }

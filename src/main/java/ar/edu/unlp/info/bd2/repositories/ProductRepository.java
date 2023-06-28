@@ -12,8 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
-    Optional<Product> findById(Long id);
-
     boolean existsByName(String name);
 
     List<Product> findByNameContaining(String name);
