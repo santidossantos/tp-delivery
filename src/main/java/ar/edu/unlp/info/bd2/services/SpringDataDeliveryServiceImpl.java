@@ -286,16 +286,16 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
         //Pageable page = PageRequest.of(0,3);
         //Page<ProductType> pagina = productTypeRepository.findAllByOrderByProductsSizeAsc(page);
         //return productTypeRepository.findTop3ByProductSize();
-        return productTypeRepository.getProductTypesOrderByProductCountAsc(PageRequest.of(0,3));
+        return productTypeRepository.findByProductTypesOrderByProductCountAsc(PageRequest.of(0,3));
     }
 
     @Transactional(readOnly = true)
-    public Supplier getSupplierWithMoreProducts() {                         // USAR SIZE DE LISTAS ?
+    public Supplier getSupplierWithMoreProducts() {
         return supplierRepository.findBySuppliersOrderedByProductCount().stream().findFirst().orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public List<Supplier> getSupplierWith1StarCalifications() {             // SE PUEDE RESOLVER SIN QUERY?
+    public List<Supplier> getSupplierWith1StarCalifications() {
         return supplierRepository.findBySupplierWith1StarCalifications();
     }
 

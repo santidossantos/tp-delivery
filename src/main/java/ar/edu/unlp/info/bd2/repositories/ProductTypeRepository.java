@@ -12,11 +12,7 @@ public interface ProductTypeRepository extends CrudRepository<ProductType, Long>
 
     boolean existsByName(String name);
 
-    //List<ProductType> findTop3ByProductSize();
-
-    //Page<ProductType> findAllByOrderByProductsSizeAsc(Pageable pageable);
-
-    @Query("SELECT pt FROM ProductType pt JOIN pt.products p GROUP BY pt.id ORDER BY COUNT(p.id) ASC")
-    List<ProductType> getProductTypesOrderByProductCountAsc(Pageable pageable);
+    @Query("SELECT pt FROM ProductType pt ORDER BY SIZE(pt.products) ASC")
+    List<ProductType> findByProductTypesOrderByProductCountAsc(Pageable pageable);
 
 }
