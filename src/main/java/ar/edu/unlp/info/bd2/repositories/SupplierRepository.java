@@ -1,7 +1,6 @@
 package ar.edu.unlp.info.bd2.repositories;
 
 import ar.edu.unlp.info.bd2.model.Supplier;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,10 +18,11 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
     /*                                                                                    *
      *      En este metodo se opta por usar la Notacion @Query ya que no es posible       *
      *      implementarlo usando nombre de metodo, dado que la clausula Group By no       *
-     *      esta Soportada por Spring Data.                                               *
+     *      esta Soportada por Spring Data y ademas tampoco existe una propiedad SIZE     *
+     *      para nombre de metodo                                                         *
      *                                                                                    */
-    @Query("SELECT s FROM Supplier s JOIN Product p ON p.supplier = s.id GROUP BY s.id ORDER BY COUNT(p.id) DESC")
-    List<Supplier> findSuppliersOrderedByProductCount();
+    @Query("SELECT s FROM Supplier s ORDER BY SIZE(s.products) DESC")
+    List<Supplier> findBySuppliersOrderedByProductCount();
 
     /*                                                                                    *
      *      En este metodo se opta por usar la Notacion @Query ya que no es posible       *
@@ -34,6 +34,6 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
             "    JOIN Item i ON i.product = p.id" +
             "    JOIN Order o ON o.id = i.order" +
             "    JOIN Qualification q ON q.order = o.id WHERE q.score = 1 ORDER BY s.id ASC")
-    List<Supplier> getSupplierWith1StarCalifications();
+    List<Supplier> findBySupplierWith1StarCalifications();
 
 }
