@@ -13,6 +13,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import static ar.edu.unlp.info.bd2.constants.ConstantValues.*;
 
 @Service
@@ -272,20 +274,18 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     }
 
     @Transactional(readOnly = true)
-    public Product getMostDemandedProduct() {               // USAR NOTACION @QUERY POR LO DEL GROUP BY
+    public Product getMostDemandedProduct() {
         return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).get(0);
     }
 
     @Transactional(readOnly = true)
     public List<Product> getProductsNoAddedToOrders() {
-        return productRepository.findProductsWithoutItems();  // NO ES POSIBLE LLEGAR A ORDERS NI A ITEMS DESDE PRODUCTS... SIN @QUERY
+        List<Long> productsInItemsIds = itemRepository.findAll().stream().map(i -> i.getProduct().getId()).collect(Collectors.toList());
+        return productRepository.findAllByIdNotIn(productsInItemsIds);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductType> getTop3ProductTypesWithLessProducts() {        // USAR SIZE DE LISTAS ?
-        //Pageable page = PageRequest.of(0,3);
-        //Page<ProductType> pagina = productTypeRepository.findAllByOrderByProductsSizeAsc(page);
-        //return productTypeRepository.findTop3ByProductSize();
+    public List<ProductType> getTop3ProductTypesWithLessProducts() {
         return productTypeRepository.findByProductTypesOrderByProductCountAsc(PageRequest.of(0,3));
     }
 

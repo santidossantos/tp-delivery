@@ -24,14 +24,7 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
     List<Product> findAllByOrderByPriceDesc(Pageable pageable);
 
-    /*                                                                                    *
-     *      En este metodo se opta por usar la Notacion @Query ya que no es posible       *
-     *      implementarlo usando nombre de metodo, dado que no el Producto no tiene       *
-     *      ninguna relacion (lista o variable de instancia) con Item ni con Orden,       *
-     *      entonces no es posible, partiendo de ProductRepository realizar la consulta   *
-     *      deseada y devolver Productos a su vez.                                        */
-    @Query("SELECT p FROM Product p LEFT JOIN Item i ON i.product = p.id WHERE i.product IS NULL")
-    List<Product> findProductsWithoutItems();
+    List<Product> findAllByIdNotIn(List<Long> ids);
 
     /*                                                                                    *
      *      En este metodo se opta por usar la Notacion @Query ya que no es posible       *
