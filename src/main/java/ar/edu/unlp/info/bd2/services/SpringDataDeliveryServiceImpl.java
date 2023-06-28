@@ -53,12 +53,22 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public Client createClient(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return clientRepository.save(new Client(name, username, password, email, dateOfBirth));
+        try {
+            return clientRepository.save(new Client(name, username, password, email, dateOfBirth));
+        }
+        catch(Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional
     public DeliveryMan createDeliveryMan(String name, String username, String password, String email, Date dateOfBirth) throws DeliveryException {
-        return deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
+        try {
+            return deliveryManRepository.save(new DeliveryMan(name, username, password, email, dateOfBirth));
+        }
+        catch(Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -87,12 +97,22 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        return addressRepository.save(new Address(name, address, apartment, coordX, coordY, description, client));
+        try {
+            return addressRepository.save(new Address(name, address, apartment, coordX, coordY, description, client));
+
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional
     public Address createAddress(String name, String address, float coordX, float coordY, String description, Client client) throws DeliveryException {
-        return addressRepository.save(new Address(name, address, coordX, coordY, description, client));
+        try {
+            return addressRepository.save(new Address(name, address, coordX, coordY, description, client));
+        }
+        catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional
@@ -275,7 +295,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true)
     public Product getMostDemandedProduct() {
-        return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).stream().findFirst().orElse(null);
+        return productRepository.findProductsOrderedByQuantity(PageRequest.of(0,1)).get(0);
     }
 
     @Transactional(readOnly = true)
