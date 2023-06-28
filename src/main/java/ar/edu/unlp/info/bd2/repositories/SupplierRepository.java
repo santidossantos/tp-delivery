@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface SupplierRepository extends CrudRepository<Supplier, Long> {
 
-    boolean existsByCuit(String cuit);
-
     List<Supplier> findByNameContaining(String name);
 
     List<Supplier> findByProductsNull();

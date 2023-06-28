@@ -6,12 +6,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
-
-    boolean existsByNumber(int number);
 
     Long countByDeliveredTrueAndDateOfOrderBetween(Date startDate, Date endDate);
 

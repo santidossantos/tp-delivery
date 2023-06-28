@@ -117,8 +117,11 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public Order createOrder(int number, Date dateOfOrder, String comments, Client client, Address address) throws DeliveryException {
-        if(orderRepository.existsByNumber(number)) throw new DeliveryException(CONSTRAINT_ERROR);
-        return orderRepository.save(new Order(number, dateOfOrder, comments, client, address));
+        try {
+            return orderRepository.save(new Order(number, dateOfOrder, comments, client, address));
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -128,8 +131,11 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public Supplier createSupplier(String name, String cuit, String address, float coordX, float coordY) throws DeliveryException {
-        if(supplierRepository.existsByCuit(cuit)) throw new DeliveryException(CONSTRAINT_ERROR);
-        return supplierRepository.save(new Supplier(name, cuit, address, coordX, coordY));
+        try {
+            return supplierRepository.save(new Supplier(name, cuit, address, coordX, coordY));
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -139,20 +145,32 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public ProductType createProductType(String name, String description) throws DeliveryException {
-        if(productTypeRepository.existsByName(name)) throw new DeliveryException(CONSTRAINT_ERROR);
-        return productTypeRepository.save(new ProductType(name, description));
+        try {
+            return productTypeRepository.save(new ProductType(name, description));
+
+        }
+        catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional
     public Product createProduct(String name, float price, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        if(productRepository.existsByName(name)) throw new DeliveryException(CONSTRAINT_ERROR);
-        return productRepository.save(new Product(name, price, weight, description, supplier, types));
+        try {
+            return productRepository.save(new Product(name, price, weight, description, supplier, types));
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional
     public Product createProduct(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
-        if(productRepository.existsByName(name)) throw new DeliveryException(CONSTRAINT_ERROR);
-        return productRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
+        try {
+            return productRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
+
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional(readOnly = true)

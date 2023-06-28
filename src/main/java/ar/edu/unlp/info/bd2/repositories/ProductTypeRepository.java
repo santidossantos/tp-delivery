@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface ProductTypeRepository extends CrudRepository<ProductType, Long> {
 
-    boolean existsByName(String name);
-
     @Query("SELECT pt FROM ProductType pt ORDER BY SIZE(pt.products) ASC")
     List<ProductType> findByProductTypesOrderByProductCountAsc(Pageable pageable);
 

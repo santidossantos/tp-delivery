@@ -12,8 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
 
-    boolean existsByName(String name);
-
     List<Product> findByNameContaining(String name);
 
     List<Product> findByTypesName(String typeName);
