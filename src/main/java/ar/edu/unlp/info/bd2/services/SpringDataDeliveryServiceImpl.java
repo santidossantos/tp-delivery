@@ -99,7 +99,6 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     public Address createAddress(String name, String address, String apartment, float coordX, float coordY, String description, Client client) throws DeliveryException {
         try {
             return addressRepository.save(new Address(name, address, apartment, coordX, coordY, description, client));
-
         } catch (Exception e) {
             throw new DeliveryException(CONSTRAINT_ERROR);
         }
@@ -147,7 +146,6 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     public ProductType createProductType(String name, String description) throws DeliveryException {
         try {
             return productTypeRepository.save(new ProductType(name, description));
-
         }
         catch (Exception e) {
             throw new DeliveryException(CONSTRAINT_ERROR);
@@ -167,7 +165,6 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
     public Product createProduct(String name, float price, Date lastPriceUpdateDate, float weight, String description, Supplier supplier, List<ProductType> types) throws DeliveryException {
         try {
             return productRepository.save(new Product(name, price, lastPriceUpdateDate, weight, description, supplier, types));
-
         } catch (Exception e) {
             throw new DeliveryException(CONSTRAINT_ERROR);
         }
@@ -241,24 +238,25 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional
     public User updateUser(User user) throws DeliveryException {
-        Optional<User> user1 = userRepository.findById(user.getId());
-        if (user1.isPresent())
+        try {
             return userRepository.save(user);
-        throw new DeliveryException(CONSTRAINT_ERROR);
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional
     public Qualification updateQualification(Qualification qualification) throws DeliveryException {
-        Optional<Qualification> q = qualificationRepository.findById(qualification.getId());
-        if (q.isPresent())
+        try {
             return qualificationRepository.save(qualification);
-        throw new DeliveryException(CONSTRAINT_ERROR);
+        } catch (Exception e) {
+            throw new DeliveryException(CONSTRAINT_ERROR);
+        }
     }
 
     @Transactional(readOnly = true)
     public List<User> getTopNUserWithMoreScore(int n) {
         return userRepository.findAllByOrderByScoreDesc(PageRequest.of(0, n));
-
     }
 
     @Transactional(readOnly = true)
@@ -288,10 +286,7 @@ public class SpringDataDeliveryServiceImpl implements DeliveryService, DeliveryS
 
     @Transactional(readOnly = true)
     public Optional<Order> getOrderDeliveredMoreExpansiveInDate(Date date) {
-        List<Order> order = orderRepository.findByDeliveredTrueAndDateOfOrderEqualsOrderByTotalPriceDesc(date, PageRequest.of(0, 1));
-        if (!order.isEmpty())
-            return Optional.ofNullable(order.get(0));
-        return Optional.empty();
+        return orderRepository.findByDeliveredTrueAndDateOfOrderEqualsOrderByTotalPriceDesc(date, PageRequest.of(0, 1)).stream().findFirst();
     }
 
     @Transactional(readOnly = true)

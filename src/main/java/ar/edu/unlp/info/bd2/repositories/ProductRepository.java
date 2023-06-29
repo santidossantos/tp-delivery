@@ -7,7 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
@@ -20,6 +19,11 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
 
     List<Product> findAllByOrderByPriceDesc(Pageable pageable);
 
+    /*                                                                                    *
+     *      En este metodo se opta por usar la Notacion @Query ya que no es posible       *
+     *      implementarlo usando nombre de metodo, dado que no se soportan                *
+     *      subconsultas usando nombres de metodos                                        *
+     *                                                                                    */
     @Query("SELECT p FROM Product p WHERE p.id NOT IN (SELECT i.product.id FROM Item i )")
     List<Product> findAllByIdNotIn();
 
@@ -28,7 +32,7 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
      *      implementarlo usando nombre de metodo, dado que la clausula Group By no       *
      *      esta Soportada por Spring Data.                                               *
      *                                                                                    */
-    @Query("SELECT p FROM Item i JOIN Product p ON i.product = p.id GROUP BY i.product ORDER BY SUM(i.quantity) DESC")
+    @Query("SELECT i.product FROM Item i GROUP BY i.product ORDER BY SUM(i.quantity) DESC")
     List<Product> findProductsOrderedByQuantity(Pageable pageable);
 
 }
