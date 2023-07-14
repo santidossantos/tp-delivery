@@ -1,6 +1,6 @@
 # Bases de Datos 2
 
-## Trabajo Practico Integrador - Etapas I y II en rama main  - La ultima etapa donde se usó Spring Data en la rama "practica4"
+## Trabajo Practico Integrador - Etapas I y II en rama main  - La última etapa donde se usó Spring Data en la rama "practica4"
 
 ### Introducción
 
